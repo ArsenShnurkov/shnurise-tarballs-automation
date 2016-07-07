@@ -1,10 +1,10 @@
 DISTFILES := aaa aab aba abb baa bab bba bbb
 
-# EOL definition is
-# taken from http://stackoverflow.com/questions/12528637/how-do-i-execute-each-command-in-a-list
+empty :=
+
 define EOL
-
-
+$(empty)
+$(empty)
 endef
 
 define run_shell_command
