@@ -7,6 +7,11 @@ EXTRA_DIST += \
 	gtkrc.win32 \
 	gtkrc.win32-dark
 
+define EOL
+
+
+endef
+
 define DISTDIR_REPLACEMENTS
         @srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
         topsrcdirstrip=`echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
@@ -17,15 +22,15 @@ define DISTDIR_REPLACEMENTS
 endef
 
 define DISTDIR_MKDIRS
-	@case $$dist_files in \
-          */*) $(MKDIR_P) `echo "$$dist_files" | \
+	@case $1 in \
+          */*) $(MKDIR_P) `echo "$1" | \
                            sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,' | \
                            sort -u` ;; \
         esac;
 endef
 
 define DISTDIR_COPYING
-        @for file in $$dist_files; do \
+        @for file in $1; do \
           if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
           if test -d $$d/$$file; then \
             dir=`echo "/$$file" | sed -e 's,/[^/]*$$,,'`; \
@@ -45,7 +50,16 @@ define DISTDIR_COPYING
         done
 endef
 
+define DISTDIR_PROCESS_IN_GROUPS
+$(eval _args:=)
+$(foreach obj,$1,$(eval _args+=$(obj))$(if $(word $2,$(_args)),$(call $3,$(_args))$(EOL)$(eval _args:=)))
+$(if $(_args),$(call $3,$(_args)))
+endef
+
+EDITED_DISTFILES:=
+$(eval $(call DISTDIR_PROCESS_IN_GROUPS,$(sort ${DISTFILES}),100,DISTDIR_REPLACEMENTS))
+
 distdir: $(DISTFILES)
-	$(call DISTDIR_REPLACEMENTS)
-	$(call DISTDIR_MKDIRS)
-	$(call DISTDIR_COPYING)
+	# first part is moved from bash to gmake, see 3 lines above
+	$(call DISTDIR_PROCESS_IN_GROUPS,$(sort ${DISTFILES}),100,DISTDIR_MKDIRS)
+	$(call DISTDIR_PROCESS_IN_GROUPS,$(DISTFILES),100,DISTDIR_COPYING)
