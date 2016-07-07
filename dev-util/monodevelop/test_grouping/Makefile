@@ -22,7 +22,7 @@ endef
 
 NOK:=
 EDITED_DISTFILES:=
-$(eval $(call split_to_groups,${DISTFILES},10000))
+$(eval $(call split_to_groups,$(sort ${DISTFILES}),10000))
 
 .PHONY: default_target
 
@@ -33,4 +33,4 @@ endef
 default_target:
 	# comment
 	@echo ${NOK}
-	$(foreach w,$(EDITED_DISTFILES),$(call my_macros,${w})${EOL})
+	$(foreach w,$(sort $(EDITED_DISTFILES)),$(call my_macros,${w})${EOL})
