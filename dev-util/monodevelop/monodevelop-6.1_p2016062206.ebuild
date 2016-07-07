@@ -2,6 +2,9 @@
 
 DISTDIR=/var/calculate/remote/distfiles
 
+# Path to directory, for example: "${PORTDIR}/${CATEGORY}/${PN}/files"
+FILESDIR=/var/lib/tarball-scripts/ArsenShnurkov/shnurise-tarballs-automation/dev-util/monodevelop/files
+
 #WORKDIR=/var/tmp/tarballs/dotnet/dev-util/monodevelop
 WORKDIR=/Z
 
@@ -28,7 +31,8 @@ echo CHECKPOINT 4
 
 # cd "${WORKDIR}"
 touch extras/MonoDevelop.Database/ChangeLog
+patch ${WORKDIR}/main/src/core/MonoDevelop.Ide/Makefile.am ${FILESDIR}/main-src-core-Monodevelop.Ide-Makefile.am.patch
 ./configure --profile=all
-make dist
-cp "${WORKDIR}/*.tar.bz2" "${DISTDIR}/monodevelop-0.0.0_p2016062206.tar.bz2"
-cd -
+#make dist
+#cp "${WORKDIR}/*.tar.bz2" "${DISTDIR}/monodevelop-0.0.0_p2016062206.tar.bz2"
+#cd -
