@@ -8,11 +8,6 @@ MKDIR_P:=mkdir -p
 srcdirstrip := $(shell echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g')
 topsrcdirstrip := $(shell echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g')
 
-$(info $$srcdirstrip=${srcdirstrip})
-$(info $$topsrcdirstrip=${topsrcdirstrip})
-
-TAB := $(subst Z,$(eval),Z	Z)
-
 define EOL
 $(eval)
 $(eval)
@@ -59,8 +54,6 @@ DISTDIR_MKDIR=$(shell ${DISTDIR_MKDIR_CMD})
 # copy files
 
 define DISTDIR_COPYING_CMD
-	$(info $${distdir}=[$(distdir)])
-	$(info $${srcdir}=[$(srcdir)])
 	for file in $1; do \
 	  if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
 	  if test -d $$d/$$file; then \
@@ -85,11 +78,6 @@ DISTDIR_COPYING=$(shell ${DISTDIR_COPYING_CMD})
 .PHONY: default_target
 
 default_target:
-	$(info $$EDITED_DISTFILES=$(sort ${EDITED_DISTFILES}))
-	$(info $$DISTDIR_DIRECTORY_LIST=${DISTDIR_DIRECTORY_LIST})
-	$(info CHECK POINT 1)
-	$(eval $(call DISTDIR_PROCESS_IN_GROUPS,${DISTDIR_DIRECTORY_LIST},10,DISTDIR_MKDIR))
-	$(info CHECK POINT 2)
-#	$(eval $(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_COPYING))
-	$(info CHECK POINT 3)
-	@echo done
+	$(call DISTDIR_PROCESS_IN_GROUPS,${DISTDIR_DIRECTORY_LIST},10,DISTDIR_MKDIR)
+	$(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_COPYING)
+	@# this silent empty line mutes "nothing to be done" warning
