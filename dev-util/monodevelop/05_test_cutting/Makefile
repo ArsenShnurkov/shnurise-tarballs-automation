@@ -1,10 +1,10 @@
 DISTFILES:=$(shell cat DISTFILES.txt)
 srcdir:=$(eval)
 top_srcdir:=../../..
-distdir:=$(eval)
+distdir:=/Z/distdir
 top_builddir:=/Z
+MKDIR_P:=mkdir -p
 
-EDITED_DISTFILES :=$(eval)
 srcdirstrip := $(shell echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g')
 topsrcdirstrip := $(shell echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g')
 
@@ -12,17 +12,6 @@ $(info $$srcdirstrip=${srcdirstrip})
 $(info $$topsrcdirstrip=${topsrcdirstrip})
 
 TAB := $(subst Z,$(eval),Z	Z)
-DISTDIR_REPLACEMENTS_DETABULATED = $(subst ${TAB},,${DISTDIR_REPLACEMENTS})
-DISTDIR_MKDIRS = $(eval $(shell $(DISTDIR_MKDIRS_CMD)))
-DISTDIR_COPYING = $(eval $(shell $(DISTDIR_COPYING_CMD)))
-
-.PHONY: default_target
-
-define DISTDIR_REPLACEMENTS
-	EDITED_DISTFILES+=$(shell for file in $1; do echo $$file; done | \
-	  sed -e "s|^${srcdirstrip}/||;t" \
-	      -e "s|^${topsrcdirstrip}/|${top_builddir}/|;t"; )
-endef
 
 define EOL
 $(eval)
@@ -35,15 +24,37 @@ $(foreach obj,$1,$(eval _args+=$(obj))$(if $(word $2,$(_args)),$(call $3,$(_args
 $(if $(_args),$(call $3,$(_args)))
 endef
 
-$(eval $(call DISTDIR_PROCESS_IN_GROUPS,$(sort ${DISTFILES}),10,DISTDIR_REPLACEMENTS_DETABULATED))
+########################################################################################################
+# compute list of files and list of directories
 
-define DISTDIR_MKDIRS_CMD
+define DISTDIR_REPLACEMENTS_CMD
+	for file in $1; do echo $$file; done | \
+	   sed -e "s|^${srcdirstrip}/||;t" \
+	       -e "s|^${topsrcdirstrip}/|${top_builddir}/|;t";
+endef
+DISTDIR_REPLACEMENTS=$(shell $(DISTDIR_REPLACEMENTS_CMD))
+
+EDITED_DISTFILES:=$(sort $(subst ${EOL}, ,$(call DISTDIR_PROCESS_IN_GROUPS,${DISTFILES},10,DISTDIR_REPLACEMENTS)))
+
+define DISTDIR_PROCESSDIRS_CMD
 	case "$1" in \
-	  */*) $(MKDIR_P) `echo "$1" | \
-	                   sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,' | \
-	                   sort -u` ;; \
+	  */*) echo "$1" | sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,' ;; \
 	esac;
 endef
+DISTDIR_PROCESSDIRS=$(shell ${DISTDIR_PROCESSDIRS_CMD})
+
+DISTDIR_DIRECTORY_LIST:=$(sort $(subst ${EOL}, ,$(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_PROCESSDIRS)))
+
+########################################################################################################
+# create directories
+
+define DISTDIR_MKDIR_CMD
+	$(MKDIR_P) $1
+endef
+DISTDIR_MKDIR=$(shell ${DISTDIR_MKDIR_CMD})
+
+########################################################################################################
+# copy files
 
 define DISTDIR_COPYING_CMD
 	$(info $${distdir}=[$(distdir)])
@@ -67,9 +78,16 @@ define DISTDIR_COPYING_CMD
 	  fi; \
 	done
 endef
+DISTDIR_COPYING=$(shell ${DISTDIR_COPYING_CMD})
+
+.PHONY: default_target
 
 default_target:
-	$(info ${EDITED_DISTFILES})
-	$(call DISTDIR_PROCESS_IN_GROUPS,$(sort ${EDITED_DISTFILES}),10,DISTDIR_MKDIRS)
-	$(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_COPYING)
+	$(info $$EDITED_DISTFILES=$(sort ${EDITED_DISTFILES}))
+	$(info $$DISTDIR_DIRECTORY_LIST=${DISTDIR_DIRECTORY_LIST})
+	$(info CHECK POINT 1)
+	$(eval $(call DISTDIR_PROCESS_IN_GROUPS,${DISTDIR_DIRECTORY_LIST},10,DISTDIR_MKDIR))
+	$(info CHECK POINT 2)
+	$(eval $(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_COPYING))
+	$(info CHECK POINT 3)
 	@echo done
