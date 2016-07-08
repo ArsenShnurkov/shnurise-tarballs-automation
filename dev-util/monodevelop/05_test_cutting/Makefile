@@ -1,8 +1,8 @@
 DISTFILES:=$(shell cat DISTFILES.txt)
 srcdir:=$(eval)
 top_srcdir:=../../..
-distdir:=/Z/distdir
-top_builddir:=/Z
+distdir:=distdir
+top_builddir:=
 MKDIR_P:=mkdir -p
 
 srcdirstrip := $(shell echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g')
@@ -26,6 +26,7 @@ endef
 
 ########################################################################################################
 # compute list of files and list of directories
+# echo and bash for are necessary to add EOL characters after each element before processing by sed
 
 define DISTDIR_REPLACEMENTS_CMD
 	for file in $1; do echo $$file; done | \
@@ -37,9 +38,10 @@ DISTDIR_REPLACEMENTS=$(shell $(DISTDIR_REPLACEMENTS_CMD))
 EDITED_DISTFILES:=$(sort $(subst ${EOL}, ,$(call DISTDIR_PROCESS_IN_GROUPS,${DISTFILES},10,DISTDIR_REPLACEMENTS)))
 
 define DISTDIR_PROCESSDIRS_CMD
-	case "$1" in \
-	  */*) echo "$1" | sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,' ;; \
-	esac;
+	for file in $1; do case "$$file" in \
+	  */*) echo $$file | sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,' ;; \
+	esac; \
+	done
 endef
 DISTDIR_PROCESSDIRS=$(shell ${DISTDIR_PROCESSDIRS_CMD})
 
@@ -88,6 +90,6 @@ default_target:
 	$(info CHECK POINT 1)
 	$(eval $(call DISTDIR_PROCESS_IN_GROUPS,${DISTDIR_DIRECTORY_LIST},10,DISTDIR_MKDIR))
 	$(info CHECK POINT 2)
-	$(eval $(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_COPYING))
+#	$(eval $(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_COPYING))
 	$(info CHECK POINT 3)
 	@echo done
