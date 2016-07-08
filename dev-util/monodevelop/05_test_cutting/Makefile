@@ -1,8 +1,4 @@
 DISTFILES:=$(shell cat DISTFILES.txt)
-srcdir:=$(eval)
-top_srcdir:=../../..
-distdir:=distdir
-top_builddir:=
 MKDIR_P:=mkdir -p
 
 srcdirstrip := $(shell echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g')

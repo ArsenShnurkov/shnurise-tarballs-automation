@@ -33,7 +33,7 @@ echo CHECKPOINT 4
 touch extras/MonoDevelop.Database/ChangeLog
 patch ${WORKDIR}/main/src/core/MonoDevelop.Ide/Makefile.am ${FILESDIR}/main-src-core-Monodevelop.Ide-Makefile.am.patch
 ./configure --profile=all
-make dist
-cp "${WORKDIR}/monodevelop-6.1.tar.bz2" "${DISTDIR}/monodevelop-6.1_p2016062206.tar.bz2"
-cp "${WORKDIR}/monodevelop-database-6.1.tar.bz2" "${DISTDIR}/monodevelop-6.1_p2016062206.tar.bz2"
+#make dist
+#cp "${WORKDIR}/tarballs/monodevelop-6.1.tar.bz2" "${DISTDIR}/monodevelop-6.1_p2016062206.tar.bz2"
+#cp "${WORKDIR}/tarballs/monodevelop-database-6.1.tar.bz2" "${DISTDIR}/monodevelop-6.1_p2016062206.tar.bz2"
 cd -
