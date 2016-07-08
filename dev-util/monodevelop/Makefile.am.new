@@ -7,47 +7,24 @@ EXTRA_DIST += \
 	gtkrc.win32 \
 	gtkrc.win32-dark
 
-define EOL
+EDITED_DISTFILES:=
 
-
-endef
+srcdirstrip:=$(shell echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g');
+topsrcdirstrip:=$(shell echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g');
 
 define DISTDIR_REPLACEMENTS
-        @srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
-        topsrcdirstrip=`echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
-        list='$(DISTFILES)'; \
-          dist_files=`for file in $$list; do echo $$file; done | \
-          sed -e "s|^$$srcdirstrip/||;t" \
-	      -e "s|^$$topsrcdirstrip/|$(top_builddir)/|;t"`;
+	EDITED_DISTFILES+=$(shell for file in $1; do echo $$file; done | \
+	  sed -e "s|^${srcdirstrip}/||;t" \
+	      -e "s|^${topsrcdirstrip}/|${top_builddir}/|;t"; )
 endef
 
-define DISTDIR_MKDIRS
-	@case $1 in \
-          */*) $(MKDIR_P) `echo "$1" | \
-                           sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,' | \
-                           sort -u` ;; \
-        esac;
-endef
+TAB:=$(subst Z,$(eval),Z	Z)
 
-define DISTDIR_COPYING
-        @for file in $1; do \
-          if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
-          if test -d $$d/$$file; then \
-            dir=`echo "/$$file" | sed -e 's,/[^/]*$$,,'`; \
-            if test -d "$(distdir)/$$file"; then \
-              find "$(distdir)/$$file" -type d ! -perm -700 -exec chmod u+rwx {} \;; \
-            fi; \
-            if test -d $(srcdir)/$$file && test $$d != $(srcdir); then \
-              cp -fpR $(srcdir)/$$file "$(distdir)$$dir" || exit 1; \
-              find "$(distdir)/$$file" -type d ! -perm -700 -exec chmod u+rwx {} \;; \
-            fi; \
-            cp -fpR $$d/$$file "$(distdir)$$dir" || exit 1; \
-          else \
-            test -f "$(distdir)/$$file" \
-            || cp -p $$d/$$file "$(distdir)/$$file" \
-            || exit 1; \
-          fi; \
-        done
+DISTDIR_REPLACEMENTS_DETABULATED=$(subst ${TAB},,${DISTDIR_REPLACEMENTS})
+
+define EOL
+$(eval)
+$(eval)
 endef
 
 define DISTDIR_PROCESS_IN_GROUPS
@@ -56,10 +33,41 @@ $(foreach obj,$1,$(eval _args+=$(obj))$(if $(word $2,$(_args)),$(call $3,$(_args
 $(if $(_args),$(call $3,$(_args)))
 endef
 
-EDITED_DISTFILES:=
-$(eval $(call DISTDIR_PROCESS_IN_GROUPS,$(sort ${DISTFILES}),100,DISTDIR_REPLACEMENTS))
+$(eval $(call DISTDIR_PROCESS_IN_GROUPS,$(sort ${DISTFILES}),10,DISTDIR_REPLACEMENTS_DETABULATED))
+
+define DISTDIR_MKDIRS_CMD
+	case "$1" in \
+	  */*) $(MKDIR_P) `echo "$1" | \
+	                   sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,' | \
+	                   sort -u` ;; \
+	esac;
+endef
+
+DISTDIR_MKDIRS=$(eval $(shell $(DISTDIR_MKDIRS_CMD)))
+
+define DISTDIR_COPYING_CMD
+	for file in $1; do \
+	  if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
+	  if test -d $$d/$$file; then \
+	    dir=`echo "/$$file" | sed -e 's,/[^/]*$$,,'`; \
+	    if test -d "$(distdir)/$$file"; then \
+	      find "$(distdir)/$$file" -type d ! -perm -700 -exec chmod u+rwx {} \;; \
+	    fi; \
+	    if test -d $(srcdir)/$$file && test $$d != $(srcdir); then \
+	      cp -fpR $(srcdir)/$$file "$(distdir)$$dir" || exit 1; \
+	      find "$(distdir)/$$file" -type d ! -perm -700 -exec chmod u+rwx {} \;; \
+	    fi; \
+	    cp -fpR $$d/$$file "$(distdir)$$dir" || exit 1; \
+	  else \
+	    test -f "$(distdir)/$$file" \
+	    || cp -p $$d/$$file "$(distdir)/$$file" \
+	    || exit 1; \
+	  fi; \
+	done
+endef
+
+DISTDIR_COPYING=$(eval $(shell $(DISTDIR_COPYING_CMD)))
 
 distdir: $(DISTFILES)
-	# first part is moved from bash to gmake, see 3 lines above
-	$(call DISTDIR_PROCESS_IN_GROUPS,$(sort ${DISTFILES}),100,DISTDIR_MKDIRS)
-	$(call DISTDIR_PROCESS_IN_GROUPS,$(DISTFILES),100,DISTDIR_COPYING)
+	$(call DISTDIR_PROCESS_IN_GROUPS,$(sort ${EDITED_DISTFILES}),10,DISTDIR_MKDIRS)
+	$(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_COPYING)

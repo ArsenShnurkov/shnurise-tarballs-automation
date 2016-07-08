@@ -1,17 +1,25 @@
 DISTFILES := aaa aab aba abb baa bab bba bbb
 
-empty :=
+TAB:=$(subst Z,$(eval),Z	Z)
 
 define EOL
-$(empty)
-$(empty)
+$(eval)
+$(eval)
 endef
 
-define run_shell_command
-EDITED_DISTFILES+=$(shell echo ${1}| \
- sed 's/./\L&/g'| \
- sed 's-b-B-g')
+srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`
+topsrcdirstrip=`echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`;
+
+EDITED_DISTFILES:=
+
+define DISTDIR_REPLACEMENTS
+	$(info $1)
+	EDITED_DISTFILES+=$(shell for file in $1; do echo $$file; done | \
+	  sed -e "s|^$$srcdirstrip/||;t" \
+	    -e "s|^$$topsrcdirstrip/|$(top_builddir)/|;t"; )
 endef
+
+DISTDIR_REPLACEMENTS_DETABULATED=$(subst ${TAB},,${DISTDIR_REPLACEMENTS})
 
 define split_to_groups
 $(eval _args:=)
@@ -25,8 +33,8 @@ define my_macros
 @echo ${1}
 endef
 
-EDITED_DISTFILES:=
-$(eval $(call split_to_groups,$(sort ${DISTFILES}),3,run_shell_command))
+$(eval $(call split_to_groups,$(sort ${DISTFILES}),3,DISTDIR_REPLACEMENTS_DETABULATED))
 
 default_target:
+	$(info ###$(DISTDIR_REPLACEMENTS_DETABULATED)###)
 	$(foreach w,$(sort $(EDITED_DISTFILES)),$(call my_macros,${w})${EOL})

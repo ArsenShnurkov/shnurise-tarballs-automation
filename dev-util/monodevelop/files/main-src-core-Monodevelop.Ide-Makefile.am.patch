@@ -1,24 +1,50 @@
 --- Makefile.am.orig	2016-07-03 05:46:33.000000000 +0300
-+++ Makefile.am.new	2016-07-03 06:18:49.049998085 +0300
-@@ -6,3 +6,35 @@
++++ Makefile.am.new	2016-07-07 19:01:58.029952789 +0300
+@@ -6,3 +6,68 @@
  	gtkrc.mac-dark \
  	gtkrc.win32 \
  	gtkrc.win32-dark
 +
-+distdir: $(DISTFILES)
-+	@echo SPECIALMARK
-+	@srcdirstrip=`echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
-+	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g'`; \
-+	list='$(DISTFILES)'; \
-+	  dist_files=`for file in $$list; do echo $$file; done | \
-+	  sed -e "s|^$$srcdirstrip/||;t" \
-+	      -e "s|^$$topsrcdirstrip/|$(top_builddir)/|;t"`; \
-+	case $$dist_files in \
-+	  */*) $(MKDIR_P) `echo "$$dist_files" | \
-+			   sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,' | \
-+			   sort -u` ;; \
-+	esac; \
-+	for file in $$dist_files; do \
++EDITED_DISTFILES:=
++
++srcdirstrip:=$(shell echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g');
++topsrcdirstrip:=$(shell echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g');
++
++define DISTDIR_REPLACEMENTS
++	EDITED_DISTFILES+=$(shell for file in $1; do echo $$file; done | \
++	  sed -e "s|^${srcdirstrip}/||;t" \
++	      -e "s|^${topsrcdirstrip}/|${top_builddir}/|;t"; )
++endef
++
++TAB:=$(subst Z,$(eval),Z	Z)
++
++DISTDIR_REPLACEMENTS_DETABULATED=$(subst ${TAB},,${DISTDIR_REPLACEMENTS})
++
++define EOL
++$(eval)
++$(eval)
++endef
++
++define DISTDIR_PROCESS_IN_GROUPS
++$(eval _args:=)
++$(foreach obj,$1,$(eval _args+=$(obj))$(if $(word $2,$(_args)),$(call $3,$(_args))$(EOL)$(eval _args:=)))
++$(if $(_args),$(call $3,$(_args)))
++endef
++
++$(eval $(call DISTDIR_PROCESS_IN_GROUPS,$(sort ${DISTFILES}),10,DISTDIR_REPLACEMENTS_DETABULATED))
++
++define DISTDIR_MKDIRS_CMD
++	case "$1" in \
++	  */*) $(MKDIR_P) `echo "$1" | \
++	                   sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,' | \
++	                   sort -u` ;; \
++	esac;
++endef
++
++DISTDIR_MKDIRS=$(eval $(shell $(DISTDIR_MKDIRS_CMD)))
++
++define DISTDIR_COPYING_CMD
++	for file in $1; do \
 +	  if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
 +	  if test -d $$d/$$file; then \
 +	    dir=`echo "/$$file" | sed -e 's,/[^/]*$$,,'`; \
@@ -36,3 +62,10 @@
 +	    || exit 1; \
 +	  fi; \
 +	done
++endef
++
++DISTDIR_COPYING=$(eval $(shell $(DISTDIR_COPYING_CMD)))
++
++distdir: $(DISTFILES)
++	$(call DISTDIR_PROCESS_IN_GROUPS,$(sort ${EDITED_DISTFILES}),10,DISTDIR_MKDIRS)
++	$(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_COPYING)
