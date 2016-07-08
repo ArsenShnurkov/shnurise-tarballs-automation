@@ -1,11 +1,5 @@
-include $(top_srcdir)/xbuild.include
-
-EXTRA_DIST += \
-	gtkrc \
-	gtkrc.mac \
-	gtkrc.mac-dark \
-	gtkrc.win32 \
-	gtkrc.win32-dark
+DISTFILES:=$(shell cat DISTFILES.txt)
+MKDIR_P:=mkdir -p
 
 srcdirstrip := $(shell echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g')
 topsrcdirstrip := $(shell echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g')
@@ -21,20 +15,18 @@ $(foreach obj,$1,$(eval _args+=$(obj))$(if $(word $2,$(_args)),$(call $3,$(_args
 $(if $(_args),$(call $3,$(_args)))
 endef
 
+########################################################################################################
+# compute list of files and list of directories
+# echo and bash for are necessary to add EOL characters after each element before processing by sed
+
 define DISTDIR_REPLACEMENTS_CMD
 	for file in $1; do echo $$file; done | \
 	   sed -e "s|^${srcdirstrip}/||;t" \
 	       -e "s|^${topsrcdirstrip}/|${top_builddir}/|;t";
 endef
+DISTDIR_REPLACEMENTS=$(shell $(DISTDIR_REPLACEMENTS_CMD))
 
-define DISTDIR_REPLACEMENTS
-$(shell $(DISTDIR_REPLACEMENTS_CMD))
-endef
-
-$(eval EDITED_DISTFILES:=$(sort $(subst ${EOL}, ,$(call DISTDIR_PROCESS_IN_GROUPS,${DISTFILES},10,DISTDIR_REPLACEMENTS))))
-
-########################################################################################################
-# compute list of directories
+EDITED_DISTFILES:=$(sort $(subst ${EOL}, ,$(call DISTDIR_PROCESS_IN_GROUPS,${DISTFILES},10,DISTDIR_REPLACEMENTS)))
 
 define DISTDIR_PROCESSDIRS_CMD
 	for file in $1; do case "$$file" in \
@@ -42,12 +34,11 @@ define DISTDIR_PROCESSDIRS_CMD
 	esac; \
 	done
 endef
-
 define DISTDIR_PROCESSDIRS
 $(shell ${DISTDIR_PROCESSDIRS_CMD})
 endef
 
-$(eval DISTDIR_DIRECTORY_LIST:=$(sort $(subst ${EOL}, ,$(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_PROCESSDIRS))))
+DISTDIR_DIRECTORY_LIST:=$(sort $(subst ${EOL}, ,$(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_PROCESSDIRS)))
 
 ########################################################################################################
 # create directories
@@ -55,9 +46,8 @@ $(eval DISTDIR_DIRECTORY_LIST:=$(sort $(subst ${EOL}, ,$(call DISTDIR_PROCESS_IN
 define DISTDIR_MKDIR_CMD
 	$(MKDIR_P) $1
 endef
-
 define DISTDIR_MKDIR
-$(eval $(shell ${DISTDIR_MKDIR_CMD}))
+$(shell ${DISTDIR_MKDIR_CMD})
 endef
 
 ########################################################################################################
@@ -83,12 +73,17 @@ define DISTDIR_COPYING_CMD
 	  fi; \
 	done
 endef
-
 define DISTDIR_COPYING
-$(eval $(shell ${DISTDIR_COPYING_CMD}))
+$(shell ${DISTDIR_COPYING_CMD})
 endef
 
-distdir: $(DISTFILES)
+.PHONY: default_target
+
+default_target:
+	echo ${srcdir} >>/Z/report.txt
+	echo ${top_srcdir} >>/Z/report.txt
+	echo ${distdir} >>/Z/report.txt
+	echo ${top_distdir} >>/Z/report.txt
 	$(call DISTDIR_PROCESS_IN_GROUPS,${DISTDIR_DIRECTORY_LIST},10,DISTDIR_MKDIR)
 	$(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_COPYING)
 	@# this silent empty line mutes "nothing to be done" warning

@@ -1,6 +1,6 @@
 --- Makefile.am.orig	2016-07-03 05:46:33.000000000 +0300
-+++ Makefile.am.new	2016-07-08 14:53:10.171069176 +0300
-@@ -6,3 +6,78 @@
++++ Makefile.am.new	2016-07-08 16:43:10.325483712 +0300
+@@ -6,3 +6,89 @@
  	gtkrc.mac-dark \
  	gtkrc.win32 \
  	gtkrc.win32-dark
@@ -19,18 +19,20 @@
 +$(if $(_args),$(call $3,$(_args)))
 +endef
 +
-+########################################################################################################
-+# compute list of files and list of directories
-+# echo and bash for are necessary to add EOL characters after each element before processing by sed
-+
 +define DISTDIR_REPLACEMENTS_CMD
 +	for file in $1; do echo $$file; done | \
 +	   sed -e "s|^${srcdirstrip}/||;t" \
 +	       -e "s|^${topsrcdirstrip}/|${top_builddir}/|;t";
 +endef
-+DISTDIR_REPLACEMENTS=$(shell $(DISTDIR_REPLACEMENTS_CMD))
 +
-+EDITED_DISTFILES:=$(sort $(subst ${EOL}, ,$(call DISTDIR_PROCESS_IN_GROUPS,${DISTFILES},10,DISTDIR_REPLACEMENTS)))
++define DISTDIR_REPLACEMENTS
++$(shell $(DISTDIR_REPLACEMENTS_CMD))
++endef
++
++$(eval EDITED_DISTFILES:=$(sort $(subst ${EOL}, ,$(call DISTDIR_PROCESS_IN_GROUPS,${DISTFILES},10,DISTDIR_REPLACEMENTS))))
++
++########################################################################################################
++# compute list of directories
 +
 +define DISTDIR_PROCESSDIRS_CMD
 +	for file in $1; do case "$$file" in \
@@ -38,9 +40,12 @@
 +	esac; \
 +	done
 +endef
-+DISTDIR_PROCESSDIRS=$(shell ${DISTDIR_PROCESSDIRS_CMD})
 +
-+DISTDIR_DIRECTORY_LIST:=$(sort $(subst ${EOL}, ,$(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_PROCESSDIRS)))
++define DISTDIR_PROCESSDIRS
++$(shell ${DISTDIR_PROCESSDIRS_CMD})
++endef
++
++$(eval DISTDIR_DIRECTORY_LIST:=$(sort $(subst ${EOL}, ,$(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_PROCESSDIRS))))
 +
 +########################################################################################################
 +# create directories
@@ -48,7 +53,10 @@
 +define DISTDIR_MKDIR_CMD
 +	$(MKDIR_P) $1
 +endef
-+DISTDIR_MKDIR=$(shell ${DISTDIR_MKDIR_CMD})
++
++define DISTDIR_MKDIR
++$(eval $(shell ${DISTDIR_MKDIR_CMD}))
++endef
 +
 +########################################################################################################
 +# copy files
@@ -73,7 +81,10 @@
 +	  fi; \
 +	done
 +endef
-+DISTDIR_COPYING=$(shell ${DISTDIR_COPYING_CMD})
++
++define DISTDIR_COPYING
++$(eval $(shell ${DISTDIR_COPYING_CMD}))
++endef
 +
 +distdir: $(DISTFILES)
 +	$(call DISTDIR_PROCESS_IN_GROUPS,${DISTDIR_DIRECTORY_LIST},10,DISTDIR_MKDIR)
