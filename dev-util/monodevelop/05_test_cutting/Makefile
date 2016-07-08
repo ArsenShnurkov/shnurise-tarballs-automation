@@ -1,10 +1,16 @@
 DISTFILES:=$(shell cat DISTFILES.txt)
-distdir:=
-srcdir:=.
+srcdir:=$(eval)
+top_srcdir:=../../..
+distdir:=$(eval)
+top_builddir:=/Z
 
-EDITED_DISTFILES := 
-srcdirstrip := $(shell echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g');
-topsrcdirstrip := $(shell echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g');
+EDITED_DISTFILES :=$(eval)
+srcdirstrip := $(shell echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g')
+topsrcdirstrip := $(shell echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g')
+
+$(info $$srcdirstrip=${srcdirstrip})
+$(info $$topsrcdirstrip=${topsrcdirstrip})
+
 TAB := $(subst Z,$(eval),Z	Z)
 DISTDIR_REPLACEMENTS_DETABULATED = $(subst ${TAB},,${DISTDIR_REPLACEMENTS})
 DISTDIR_MKDIRS = $(eval $(shell $(DISTDIR_MKDIRS_CMD)))
@@ -66,3 +72,4 @@ default_target:
 	$(info ${EDITED_DISTFILES})
 	$(call DISTDIR_PROCESS_IN_GROUPS,$(sort ${EDITED_DISTFILES}),10,DISTDIR_MKDIRS)
 	$(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_COPYING)
+	@echo done
