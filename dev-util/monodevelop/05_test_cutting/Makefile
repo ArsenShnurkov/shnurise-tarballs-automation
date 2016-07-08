@@ -1,0 +1,68 @@
+DISTFILES:=$(shell cat DISTFILES.txt)
+distdir:=
+srcdir:=.
+
+EDITED_DISTFILES := 
+srcdirstrip := $(shell echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g');
+topsrcdirstrip := $(shell echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g');
+TAB := $(subst Z,$(eval),Z	Z)
+DISTDIR_REPLACEMENTS_DETABULATED = $(subst ${TAB},,${DISTDIR_REPLACEMENTS})
+DISTDIR_MKDIRS = $(eval $(shell $(DISTDIR_MKDIRS_CMD)))
+DISTDIR_COPYING = $(eval $(shell $(DISTDIR_COPYING_CMD)))
+
+.PHONY: default_target
+
+define DISTDIR_REPLACEMENTS
+	EDITED_DISTFILES+=$(shell for file in $1; do echo $$file; done | \
+	  sed -e "s|^${srcdirstrip}/||;t" \
+	      -e "s|^${topsrcdirstrip}/|${top_builddir}/|;t"; )
+endef
+
+define EOL
+$(eval)
+$(eval)
+endef
+
+define DISTDIR_PROCESS_IN_GROUPS
+$(eval _args:=)
+$(foreach obj,$1,$(eval _args+=$(obj))$(if $(word $2,$(_args)),$(call $3,$(_args))$(EOL)$(eval _args:=)))
+$(if $(_args),$(call $3,$(_args)))
+endef
+
+$(eval $(call DISTDIR_PROCESS_IN_GROUPS,$(sort ${DISTFILES}),10,DISTDIR_REPLACEMENTS_DETABULATED))
+
+define DISTDIR_MKDIRS_CMD
+	case "$1" in \
+	  */*) $(MKDIR_P) `echo "$1" | \
+	                   sed '/\//!d;s|^|$(distdir)/|;s,/[^/]*$$,,' | \
+	                   sort -u` ;; \
+	esac;
+endef
+
+define DISTDIR_COPYING_CMD
+	$(info $${distdir}=[$(distdir)])
+	$(info $${srcdir}=[$(srcdir)])
+	for file in $1; do \
+	  if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
+	  if test -d $$d/$$file; then \
+	    dir=`echo "/$$file" | sed -e 's,/[^/]*$$,,'`; \
+	    if test -d "$(distdir)/$$file"; then \
+	      find "$(distdir)/$$file" -type d ! -perm -700 -exec chmod u+rwx {} \;; \
+	    fi; \
+	    if test -d $(srcdir)/$$file && test $$d != $(srcdir); then \
+	      cp -fpR $(srcdir)/$$file "$(distdir)$$dir" || exit 1; \
+	      find "$(distdir)/$$file" -type d ! -perm -700 -exec chmod u+rwx {} \;; \
+	    fi; \
+	    cp -fpR $$d/$$file "$(distdir)$$dir" || exit 1; \
+	  else \
+	    test -f "$(distdir)/$$file" \
+	    || cp -p $$d/$$file "$(distdir)/$$file" \
+	    || exit 1; \
+	  fi; \
+	done
+endef
+
+default_target:
+	$(info ${EDITED_DISTFILES})
+	$(call DISTDIR_PROCESS_IN_GROUPS,$(sort ${EDITED_DISTFILES}),10,DISTDIR_MKDIRS)
+	$(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_COPYING)
