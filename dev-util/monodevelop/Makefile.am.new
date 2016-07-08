@@ -7,10 +7,10 @@ EXTRA_DIST += \
 	gtkrc.win32 \
 	gtkrc.win32-dark
 
-EDITED_DISTFILES:=
+EDITED_DISTFILES:=$(eval)
 
-srcdirstrip:=$(shell echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g');
-topsrcdirstrip:=$(shell echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g');
+srcdirstrip:=$(shell echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g')
+topsrcdirstrip:=$(shell echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g')
 
 define DISTDIR_REPLACEMENTS
 	EDITED_DISTFILES+=$(shell for file in $1; do echo $$file; done | \
@@ -71,3 +71,4 @@ DISTDIR_COPYING=$(eval $(shell $(DISTDIR_COPYING_CMD)))
 distdir: $(DISTFILES)
 	$(call DISTDIR_PROCESS_IN_GROUPS,$(sort ${EDITED_DISTFILES}),10,DISTDIR_MKDIRS)
 	$(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_COPYING)
+	@echo done

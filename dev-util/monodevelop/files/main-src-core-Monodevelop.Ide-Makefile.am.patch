@@ -1,14 +1,14 @@
 --- Makefile.am.orig	2016-07-03 05:46:33.000000000 +0300
-+++ Makefile.am.new	2016-07-07 19:01:58.029952789 +0300
-@@ -6,3 +6,68 @@
++++ Makefile.am.new	2016-07-08 08:08:58.052560830 +0300
+@@ -6,3 +6,69 @@
  	gtkrc.mac-dark \
  	gtkrc.win32 \
  	gtkrc.win32-dark
 +
-+EDITED_DISTFILES:=
++EDITED_DISTFILES:=$(eval)
 +
-+srcdirstrip:=$(shell echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g');
-+topsrcdirstrip:=$(shell echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g');
++srcdirstrip:=$(shell echo "$(srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g')
++topsrcdirstrip:=$(shell echo "$(top_srcdir)" | sed 's/[].[^$$\\*]/\\\\&/g')
 +
 +define DISTDIR_REPLACEMENTS
 +	EDITED_DISTFILES+=$(shell for file in $1; do echo $$file; done | \
@@ -69,3 +69,4 @@
 +distdir: $(DISTFILES)
 +	$(call DISTDIR_PROCESS_IN_GROUPS,$(sort ${EDITED_DISTFILES}),10,DISTDIR_MKDIRS)
 +	$(call DISTDIR_PROCESS_IN_GROUPS,${EDITED_DISTFILES},10,DISTDIR_COPYING)
++	@echo done
