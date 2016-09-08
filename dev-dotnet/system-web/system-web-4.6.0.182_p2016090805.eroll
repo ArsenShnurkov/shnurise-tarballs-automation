@@ -1,0 +1,26 @@
+#!/bin/bash
+
+DISTDIR=/var/calculate/remote/distfiles
+
+WORKDIR=/var/tmp/tarballs/dotnet/dev-dotnet/system-web
+
+if [ ! -d "${WORKDIR}" ]; then
+    mkdir -p "${WORKDIR}"
+    cd "${WORKDIR}"
+    git clone https://github.com/ArsenShnurkov/mono.git "${WORKDIR}"
+    git checkout system-web-for-php
+    git reset --hard c1c12f64b99c113bfdc19415116b5d7457602abd
+    ./autogen.sh
+    make dist
+    ./configure
+else
+    cd "${WORKDIR}"
+    git fetch origin
+fi
+
+## create archive from list of files
+cd mcs/class/System.Web
+tar --create --files-from=./System.Web.dll.sources --gzip --file ../test.tar.gz
+cd -
+
+cd -
