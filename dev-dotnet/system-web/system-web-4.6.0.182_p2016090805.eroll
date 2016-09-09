@@ -1,0 +1,43 @@
+#!/bin/bash
+
+DISTDIR=/var/calculate/remote/distfiles
+
+WORKDIR=/var/tmp/tarballs/dotnet/dev-dotnet/system-web
+
+if [ ! -d "${WORKDIR}" ]; then
+    mkdir -p "${WORKDIR}"
+    cd "${WORKDIR}"
+    git clone https://github.com/ArsenShnurkov/mono.git "${WORKDIR}"
+    git checkout system-web-for-php
+    git reset --hard c1c12f64b99c113bfdc19415116b5d7457602abd
+    ./autogen.sh
+    make dist
+    ./configure
+else
+    cd "${WORKDIR}"
+    git fetch origin
+fi
+
+mpt-csproj --basedir=${WORKDIR} --in=${WORKDIR}/mcs/class/System.Web/System.Web.csproj | \
+    grep -v "mcs/class/System.Web/System.Web/UplevelHelper.cs" \
+    >${WORKDIR}/list_of_files.txt
+echo mcs/class/System.Web/UplevelHelperDefinitions.xml >>${WORKDIR}/list_of_files.txt
+echo mcs/class/msfinal.pub >>${WORKDIR}/list_of_files.txt
+echo mcs/class/mono.snk >>${WORKDIR}/list_of_files.txt
+
+## create archive from list of files
+tar --create --files-from=${WORKDIR}/list_of_files.txt --gzip --file ${WORKDIR}/system-web-4.6.0.182.tar.gz
+UPLOADDIR=/var/tmp/aaa/shnurise-tarballs.git
+tar xzvpf ${WORKDIR}/system-web-4.6.0.182.tar.gz -C ${UPLOADDIR}
+
+TAGNAME=dev-dotnet/system-web/system-web-4.6.0.182
+cd ${UPLOADDIR}
+git add *
+git commit -m "$(date)"
+git push --delete origin ${TAGNAME}
+git tag --delete ${TAGNAME}
+git tag ${TAGNAME}
+git push origin ${TAGNAME}
+cd -
+
+cd -
