@@ -18,9 +18,26 @@ else
     git fetch origin
 fi
 
+mpt-csproj --basedir=${WORKDIR} --in=${WORKDIR}/mcs/class/System.Web/System.Web.csproj | \
+    grep -v "mcs/class/System.Web/System.Web/UplevelHelper.cs" \
+    >${WORKDIR}/list_of_files.txt
+echo mcs/class/System.Web/UplevelHelperDefinitions.xml >>${WORKDIR}/list_of_files.txt
+echo mcs/class/msfinal.pub >>${WORKDIR}/list_of_files.txt
+echo mcs/class/mono.snk >>${WORKDIR}/list_of_files.txt
+
 ## create archive from list of files
-cd mcs/class/System.Web
-tar --create --files-from=./System.Web.dll.sources --gzip --file ../test.tar.gz
+tar --create --files-from=${WORKDIR}/list_of_files.txt --gzip --file ${WORKDIR}/system-web-4.6.0.182.tar.gz
+UPLOADDIR=/var/tmp/aaa/shnurise-tarballs.git
+tar xzvpf ${WORKDIR}/system-web-4.6.0.182.tar.gz -C ${UPLOADDIR}
+
+TAGNAME=dev-dotnet/system-web/system-web-4.6.0.182
+cd ${UPLOADDIR}
+git add *
+git commit -m "$(date)"
+git push --delete origin ${TAGNAME}
+git tag --delete ${TAGNAME}
+git tag ${TAGNAME}
+git push origin ${TAGNAME}
 cd -
 
 cd -
