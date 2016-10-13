@@ -1,24 +1,24 @@
 #!/bin/bash
 
 CATEGORY=dev-util
-PN=gppg-dbremner
-PV=1.5.2_p2015112101
+PN=gplex-dbremner
+PV=1.2.2_p2015112101
 
 DISTDIR=/var/calculate/remote/distfiles
 FILESDIR=/var/lib/tarball-scripts/ArsenShnurkov/shnurise-tarballs-automation/${CATEGORY}/${PN}/files
 WORKDIR=/var/tmp/tarballs/dotnet/${CATEGORY}/${PN}
 
-EGIT_REPO_URI=https://github.com/dbremner/gppg.git
-EGIT_COMMIT=a5b96fbb22cfe432e6c7d91c5dbc9658f8243668
+EGIT_REPO_URI=https://github.com/dbremner/gplex.git
+EGIT_COMMIT=594729523b5d208c16202fa1870567069034ca32
 
 S="${WORKDIR}/${PN}-${EGIT_COMMIT}"
+
 
 die() {
     echo died
     pwd
     exit 1
 }
-
 
 ###
 
@@ -34,18 +34,19 @@ else
     git fetch origin || die
 fi
 
+
 echo CHECKPOINT [F.2] Fetching binary tools for creating generated source files
 
 if [ ! -f "${WORKDIR}/yacclextools.0.2.2.nupkg" ]; then
     wget -c https://api.nuget.org/packages/yacclextools.0.2.2.nupkg -O "${WORKDIR}/yacclextools.0.2.2.nupkg" || die
 else
-    echo "tools was already downloaded"
+    echo "tools was already downloaded" || die
 fi
 
 if [ ! -d "${WORKDIR}/yacclextools" ]; then
     unzip -u "${WORKDIR}/yacclextools.0.2.2.nupkg" -d "${WORKDIR}/yacclextools" || die
 else
-    echo "tools are already unpacked"
+    echo "tools are already unpacked" || die
 fi
 
 
@@ -68,17 +69,24 @@ fi
 # Copy files from the index to the final tree
 git checkout-index -a -f --prefix="${S}/" || die
 
-cd "ParserGenerator/SpecFiles"
-/usr/bin/mono --debug "${WORKDIR}/yacclextools/tools/gppg.exe" /gplex /nolines "gppg.y" || die
-mv Parser.cs "${S}/ParserGenerator/Parser.cs" || die
-/usr/bin/mono --debug "${WORKDIR}/yacclextools/tools/gplex.exe" gppg.lex || die
-mv Scanner.cs "${S}/ParserGenerator/Scanner.cs" || die
-/usr/bin/mono --debug "${WORKDIR}/yacclextools/tools/gplex.exe" ScanAction.lex || die
-mv ScanAction.cs "${S}/ParserGenerator/scanaction.cs" || die
+
+cd "SpecFiles" || die
+/usr/bin/mcs -r:System.dll -R:System.Windows.Forms.dll GenerateResource.cs || die
+/usr/bin/mono --debug GenerateResource.exe || die
+mv Content.resx "${S}/IncludeResources" || die
+rm GenerateResource.exe || die
+
+/usr/bin/mono --debug "${WORKDIR}/yacclextools/tools/gppg.exe" /gplex /nolines "gplex.y" || die
+mv Parser.cs "${S}/GPLEX/parser.cs" || die
+
+/usr/bin/mono --debug "${WORKDIR}/yacclextools/tools/gplex.exe" gplex.lex || die
+mv Scanner.cs "${S}/GPLEX/Scanner.cs" || die
+
 if [ -f GplexBuffers.cs ]; then
-    mv GplexBuffers.cs "${S}/ParserGenerator/GplexBuffers.cs" || die
+    mv GplexBuffers.cs "${S}/GPLEX/GplexBuffers.cs" || die
 fi
-cd -
+
+cd - || die
 
 ###
 
@@ -86,12 +94,12 @@ PKGDIR=/var/tmp/aaa
 DISTFILES_PULL_URI=https://github.com/ArsenShnurkov/shnurise-tarballs.git
 DISTFILES_PUSH_URI=https://${GITHUB_API_TOKEN}@github.com/ArsenShnurkov/shnurise-tarballs.git
 
-BRANCH_NAME=temporary-branch-name123
+BRANCH_NAME=temporary-branch-name124
 TAG_NAME=${CATEGORY}/${PN}/${PN}-${PV}
 /usr/libexec/git-core/git-check-ref-format ${TAG_NAME} || die
 
 if [ ! -d "${PKGDIR}" ]; then
-    mkdir -p "${PKGDIR}" || die
+    mkdir -p "${PKGDIR}"
     cd "${PKGDIR}" || die
     git clone -b master --single-branch "${DISTFILES_PULL_URI}" shnurise-tarballs.git || die
     cd shnurise-tarballs.git || die
@@ -117,8 +125,7 @@ if [ -f .gitattributes ]; then
     rm -f .gitattributes
 fi
 
-#cd "${PKGDIR}/shnurise-tarballs.git" || die
-cp --copy-contents -rf "${S}/" --no-target-directory .
+cp --copy-contents -rf "${S}/" --no-target-directory . || die
 
 git add --all --force * || die
 git commit -m "commited by ${PN}-${PV}.eroll script" || die
