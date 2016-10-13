@@ -1,0 +1,111 @@
+#!/bin/bash
+
+CATEGORY=dev-util
+PN=gppg-dbremner
+PV=1.5.2_p2015112101
+
+DISTDIR=/var/calculate/remote/distfiles
+FILESDIR=/var/lib/tarball-scripts/ArsenShnurkov/shnurise-tarballs-automation/${CATEGORY}/${PN}/files
+WORKDIR=/var/tmp/tarballs/dotnet/${CATEGORY}/${PN}
+
+EGIT_REPO_URI=https://github.com/dbremner/gppg.git
+EGIT_COMMIT=a5b96fbb22cfe432e6c7d91c5dbc9658f8243668
+
+S="${WORKDIR}/${PN}-${EGIT_COMMIT}"
+
+
+###
+
+
+echo CHECKPOINT [F.1] Fetching "${EGIT_REPO_URI}" repository
+
+if [ ! -d "${WORKDIR}" ]; then
+    mkdir -p "${WORKDIR}"
+    cd "${WORKDIR}"
+    git clone "${EGIT_REPO_URI}" "${WORKDIR}"
+else
+    cd "${WORKDIR}"
+    git fetch origin
+fi
+
+echo CHECKPOINT [F.2] Fetching binary tools for creating generated source files
+
+if [ ! -f "${WORKDIR}/yacclextools.0.2.2.nupkg" ]; then
+    wget -c https://api.nuget.org/packages/yacclextools.0.2.2.nupkg -O "${WORKDIR}/yacclextools.0.2.2.nupkg"
+else
+    echo "tools was already downloaded"
+fi
+
+if [ ! -d "${WORKDIR}/yacclextools" ]; then
+    unzip -u "${WORKDIR}/yacclextools.0.2.2.nupkg" -d "${WORKDIR}/yacclextools"
+else
+    echo "tools are already unpacked"
+fi
+
+
+###
+
+
+echo CHECKPOINT [C] Checking out "${EGIT_COMMIT}"
+
+git reset --hard ${EGIT_COMMIT}
+
+if [ -f "${WORKDIR}/.gitmodules" ]; then
+    echo CHECKPOINT [M] Checking out submodules from "${WORKDIR}/.gitmodules"
+    git submodule update --init --recursive
+fi
+
+###
+
+
+# https://git-scm.com/docs/git-checkout-index
+# Copy files from the index to the final tree
+git checkout-index -a -f --prefix="${S}/"
+
+cd "ParserGenerator/SpecFiles"
+/usr/bin/mono --debug "${WORKDIR}/yacclextools/tools/gppg.exe" /gplex /nolines "gppg.y"
+mv Parser.cs "${S}/ParserGenerator/Parser.cs"
+/usr/bin/mono --debug "${WORKDIR}/yacclextools/tools/gplex.exe" gppg.lex
+mv Scanner.cs "${S}/ParserGenerator/Scanner.cs"
+/usr/bin/mono --debug "${WORKDIR}/yacclextools/tools/gplex.exe" ScanAction.lex
+mv ScanAction.cs "${S}/ParserGenerator/scanaction.cs"
+if [ -f GplexBuffers.cs ]; then
+    mv GplexBuffers.cs "${S}/ParserGenerator/GplexBuffers.cs"
+fi
+cd -
+
+###
+
+PKGDIR=/var/tmp/aaa
+DISTFILES_PULL_URI=https://github.com/ArsenShnurkov/shnurise-tarballs.git
+DISTFILES_PUSH_URI=https://${GITHUB_API_TOKEN}@github.com/ArsenShnurkov/shnurise-tarballs.git
+
+BRANCH_NAME=temporary-branch-name123
+TAG_NAME=${CATEGORY}/${PN}/${PN}-${PV}
+/usr/libexec/git-core/git-check-ref-format ${TAG_NAME}
+
+if [ ! -d "${PKGDIR}" ]; then
+    mkdir -p "${PKGDIR}"
+    cd "${PKGDIR}"
+    git clone -b master --single-branch "${DISTFILES_PULL_URI}" shnurise-tarballs.git
+    git remote set-url --push origin "${DISTFILES_PUSH_URI}"
+    git clone "${DISTFILES_PULL_URI}" "${PKGDIR}"
+else
+    cd "${PKGDIR}"
+    git fetch origin
+fi
+cd shnurise-tarballs.git
+git checkout --orphan "${BRANCH_NAME}"
+git rm --cached * .gitignore .gitattributes
+cp -r "${S}" .
+git add *
+git commit -m "commited by ${PN}-${PV}.eroll script"
+git tag "${TAG_NAME}"
+git push origin "${TAG_NAME}"
+git checkout master
+git branch -D "${BRANCH_NAME}"
+
+cd "${S}"
+echo CHECKPOINT [P] Converting "`pwd`" directory into archive
+
+echo https://github.com/ArsenShnurkov/shnurise-tarballs/archive/${CATEGORY}/${PN}/${PN}-${PV}.tar.gz
