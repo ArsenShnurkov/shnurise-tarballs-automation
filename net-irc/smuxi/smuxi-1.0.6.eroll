@@ -1,0 +1,10 @@
+WORKDIR=/var/tmp/tarballs/dotnet/net-irc/smuxi/1.0.6.130
+DISTDIR=/var/calculate/remote/distfiles
+mkdir -p "${WORKDIR}"
+git clone https://github.com/meebey/smuxi.git "${WORKDIR}"
+cd "${WORKDIR}"
+git reset --hard 7c17ff43d8a63f436b6970bbba43ea05fb72b7ef
+./autogen.sh
+make dist
+cp "${WORKDIR}/smuxi-*.tar.gz" "${DISTDIR}/smuxi-1.0.6.130.tar.gz"
+cd -
