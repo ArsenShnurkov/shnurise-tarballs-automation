@@ -20,11 +20,21 @@ Write-Host $gzArchiveName
 # unpack sources
 $dstDir=Join-Path -Path $currentDir -ChildPath 'work'
 
-$file = [IO.File]::OpenRead($gzArchiveName)
-$inStream = New-Object -TypeName [ICSharpCode.SharpZipLib.GZip.GZipInputStream] $file
-$tarIn = New-Object -TypeName [ICSharpCode.SharpZipLib.Tar.TarInputStream] $inStream
-$archive = [ICSharpCode.SharpZipLib.Tar.TarArchive]::CreateInputTarArchive($tarIn)
-$archive.ExtractContents($dstDir)
+try
+{
+  $file = [IO.File]::OpenRead($gzArchiveName)
+  $inStream = New-Object -TypeName [ICSharpCode.SharpZipLib.GZip.GZipInputStream] $file
+  $tarIn = New-Object -TypeName [ICSharpCode.SharpZipLib.Tar.TarInputStream] $inStream
+  $archive = [ICSharpCode.SharpZipLib.Tar.TarArchive]::CreateInputTarArchive($tarIn)
+  $archive.ExtractContents($dstDir)
+}
+finally
+{
+  $archive.Close
+#  $tarIn.Close
+#  $file.Close
+}
+
 
 # prepare sources 
 ## replace files
