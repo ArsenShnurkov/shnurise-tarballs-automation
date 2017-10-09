@@ -2,10 +2,9 @@ try
 {
 Write-Host "Entring roll script"
 
-#Add-Type -AssemblyName "ICSharpCode.SharpZipLib, Version=4.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73"
+Add-Type -AssemblyName "ICSharpCode.SharpZipLib, Version=4.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73"
 
-#$currentDir = [IO.Directory]::GetCurrentDirectory()
-#$gzArchiveName = Join-Path -Path $currentDir -ChildPath 'outputfile.tar.gz'
+$currentDir = [IO.Directory]::GetCurrentDirectory()
 
 # DISTDIR="/var/portage-distdir"
 
@@ -19,8 +18,13 @@ Write-Host $gzArchiveName
 #    $wc.DownloadFile($uri, $gzArchiveName)
 
 # unpack sources
-$inStream = [IO.File]::OpenRead($gzArchiveName)
-$gzipStream = New-Object System.IO.Compression.GZipStream
+$dstDir=Join-Path -Path $currentDir -ChildPath 'work'
+
+$file = [IO.File]::OpenRead($gzArchiveName)
+$inStream = New-Object -TypeName [ICSharpCode.SharpZipLib.GZip.GZipInputStream] $file
+$tarIn = New-Object -TypeName [ICSharpCode.SharpZipLib.Tar.TarInputStream] $inStream
+$archive = [ICSharpCode.SharpZipLib.Tar.TarArchive]::CreateInputTarArchive($tarIn)
+$archive.ExtractContents($dstDir)
 
 # prepare sources 
 ## replace files
