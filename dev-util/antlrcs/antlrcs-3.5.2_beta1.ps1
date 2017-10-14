@@ -2,40 +2,62 @@ try
 {
 Write-Host "Entring roll script"
 
-# Add-Type -AssemblyName "ICSharpCode.SharpZLib, Version=0.86.0.762, Culture=neutral, PublicKeyToken=0738eb9f132ed756"
-
-#$currentDir = [IO.Directory]::GetCurrentDirectory()
+try
+{
 
 $DISTDIR="/var/portage-distdir"
-$WORKDIR=/var/tmp/tarballs/dotnet/${CATEGORY}/${PN}
 
-# Load sources from github
-$uri = "https://github.com/antlr/antlrcs/archive/ca331b7109e1faa5a6aa7336bb6281ce9363e62b.tar.gz"
+$gzArchiveName=Join-Path -Path $DISTDIR -ChildPath "antlrcs-3.5.2_beta1_p6.tar.gz"
 
-$gzArchiveName="/var/portage-distdir/antlrcs-3.5.2_beta1_p6.tar.gz"
-Write-Host $gzArchiveName
+if (Test-Path $gzArchiveName)
+{
+    Write-Host "File is already downloaded"
+    Write-Host $gzArchiveName
+}
+else
+{
+    # Load sources from github
+    $uri = "https://github.com/antlr/antlrcs/archive/ca331b7109e1faa5a6aa7336bb6281ce9363e62b.tar.gz"
+    $wc = New-Object -TypeName System.Net.WebClient
+    $wc.DownloadFile($uri, $gzArchiveName)
+}
 
-# $wc = New-Object -TypeName System.Net.WebClient
-#    $wc.DownloadFile($uri, $gzArchiveName)
+}
+catch
+{
+    Write-Host "Exception during downloading"
+    throw;
+}
 
-# unpack sources
-$dstDir=Join-Path -Path $currentDir -ChildPath 'work'
+$CATEGORY="dev-util"
+$PN="antlrcs"
+
+$WORKDIR="/var/tmp/tarballs/shnurise"
+$WORKDIR=Join-Path -Path $WORKDIR -ChildPath $CATEGORY
+$WORKDIR=Join-Path -Path $WORKDIR -ChildPath $PN
+if (Test-Path $WORKDIR)
+{
+    Write-Host "Working directory already exists"
+    Write-Host $WORKDIR
+}
+else
+{
+    New-Item -ItemType Directory -Force -Path $WORKDIR
+}
 
 try
 {
-  /usr/bin/tartool $gzArchiveName
+    Add-Type -AssemblyName "ICSharpCode.SharpZLib, Version=0.86.0.762, Culture=neutral, PublicKeyToken=0738eb9f132ed756"
   
-#  $file = [IO.File]::OpenRead($gzArchiveName)
-#  $inStream = New-Object -TypeName [ICSharpCode.SharpZLib.GZip.GZipInputStream] $file
-#  $tarIn = New-Object -TypeName [ICSharpCode.SharpZLib.Tar.TarInputStream] $inStream
-#  $archive = [ICSharpCode.SharpZLib.Tar.TarArchive]::CreateInputTarArchive($tarIn)
-#  $archive.ExtractContents($dstDir)
+    $file = [IO.File]::OpenRead($gzArchiveName)
+    $inStream=New-Object -TypeName ICSharpCode.SharpZipLib.GZip.GZipInputStream $file
+    $tarIn = New-Object -TypeName ICSharpCode.SharpZipLib.Tar.TarInputStream $inStream
+    $archive = [ICSharpCode.SharpZipLib.Tar.TarArchive]::CreateInputTarArchive($tarIn)
+    $archive.ExtractContents($WORKDIR)
 }
 finally
 {
-#  $archive.Close
-#  $tarIn.Close
-#  $file.Close
+    $archive.Close
 }
 
 
@@ -49,8 +71,8 @@ finally
 Write-Host "Exiting roll script"
 
 }
-catch 
-# [Exception]
+catch
 {
-    echo $_.Exception.GetType().FullName, $_.Exception.Message, $_.Exception.ToString()
+    Write-Host "Outer exception:"
+    Write-Host $_.Exception.GetType().FullName, $_.Exception.Message, $_.Exception.ToString()
 }
