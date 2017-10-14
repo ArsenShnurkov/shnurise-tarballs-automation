@@ -62,6 +62,8 @@ finally
     $archive.Close | Out-Null
 }
 
+$S = Get-ChildItem -path $WORKDIR -filter | Select-Object -Expand FullName
+Write-Host "`$S=`"$S`""
 
 # prepare sources 
 ## replace files
