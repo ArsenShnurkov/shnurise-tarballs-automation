@@ -2,11 +2,12 @@ try
 {
 Write-Host "Entring roll script"
 
-Add-Type -AssemblyName "ICSharpCode.SharpZipLib, Version=4.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73"
+# Add-Type -AssemblyName "ICSharpCode.SharpZLib, Version=0.86.0.762, Culture=neutral, PublicKeyToken=0738eb9f132ed756"
 
-$currentDir = [IO.Directory]::GetCurrentDirectory()
+#$currentDir = [IO.Directory]::GetCurrentDirectory()
 
-# DISTDIR="/var/portage-distdir"
+$DISTDIR="/var/portage-distdir"
+$WORKDIR=/var/tmp/tarballs/dotnet/${CATEGORY}/${PN}
 
 # Load sources from github
 $uri = "https://github.com/antlr/antlrcs/archive/ca331b7109e1faa5a6aa7336bb6281ce9363e62b.tar.gz"
@@ -22,15 +23,17 @@ $dstDir=Join-Path -Path $currentDir -ChildPath 'work'
 
 try
 {
-  $file = [IO.File]::OpenRead($gzArchiveName)
-  $inStream = New-Object -TypeName [ICSharpCode.SharpZipLib.GZip.GZipInputStream] $file
-  $tarIn = New-Object -TypeName [ICSharpCode.SharpZipLib.Tar.TarInputStream] $inStream
-  $archive = [ICSharpCode.SharpZipLib.Tar.TarArchive]::CreateInputTarArchive($tarIn)
-  $archive.ExtractContents($dstDir)
+  /usr/bin/tartool $gzArchiveName
+  
+#  $file = [IO.File]::OpenRead($gzArchiveName)
+#  $inStream = New-Object -TypeName [ICSharpCode.SharpZLib.GZip.GZipInputStream] $file
+#  $tarIn = New-Object -TypeName [ICSharpCode.SharpZLib.Tar.TarInputStream] $inStream
+#  $archive = [ICSharpCode.SharpZLib.Tar.TarArchive]::CreateInputTarArchive($tarIn)
+#  $archive.ExtractContents($dstDir)
 }
 finally
 {
-  $archive.Close
+#  $archive.Close
 #  $tarIn.Close
 #  $file.Close
 }
