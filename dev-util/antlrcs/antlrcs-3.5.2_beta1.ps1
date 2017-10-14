@@ -1,35 +1,48 @@
+function WebDownload ( $url, $fullFileName )
+{
+    try
+    {
+        if (Test-Path $fullFileName)
+        {
+            Write-Host "File `"$fullFileName`" is already downloaded "
+        }
+        else
+        {
+            # Load sources from github
+            Write-Host "Downloading from URL $url"
+            $wc = New-Object -TypeName System.Net.WebClient
+            $wc.AllowAutoRedirect = $true
+            $wc.DownloadFile($url, $fullFileName)
+        }
+    }
+    catch
+    {
+        Write-Host "Exception during WebDownload"
+        throw;
+    }
+}
+
 try
 {
 Write-Host "Entring roll script"
 
-try
-{
-
 $DISTDIR="/var/portage-distdir"
 
 $gzArchiveName=Join-Path -Path $DISTDIR -ChildPath "antlrcs-3.5.2_beta1_p6.tar.gz"
+$GithubUrl="https://github.com/antlr/antlrcs/tarball/ca331b7109e1faa5a6aa7336bb6281ce9363e62b"
 
-if (Test-Path $gzArchiveName)
+$wc = New-Object -TypeName "System.Net.WebClient"
+if ( $ws -eq $null )
 {
-    Write-Host "File is already downloaded"
-    Write-Host $gzArchiveName
+    Write-Host "`$ws is $ws"
+    Write-Host "..."
 }
-else
-{
-    # Load sources from github
-    $uri = "https://github.com/antlr/antlrcs/tarball/ca331b7109e1faa5a6aa7336bb6281ce9363e62b"
-    Write-Host "Downloading from URL"
-    Write-Host $uri
-    $wc = New-Object -TypeName System.Net.WebClient
-    $wc.DownloadFile($uri, $gzArchiveName)
-}
+$wc.MaximumAutomaticRedirections=1
+$wc.AllowAutoRedirect=[System.Boolean]::true
+$wc.DownloadFile($GithubUrl, $gzArchiveName)
 
-}
-catch
-{
-    Write-Host "Exception during downloading"
-    throw;
-}
+WebDownload $GithubUrl $gzArchiveName
+
 
 $CATEGORY="dev-util"
 $PN="antlrcs"
@@ -37,6 +50,9 @@ $PN="antlrcs"
 $WORKDIR="/var/tmp/tarballs/shnurise"
 $WORKDIR=Join-Path -Path $WORKDIR -ChildPath $CATEGORY
 $WORKDIR=Join-Path -Path $WORKDIR -ChildPath $PN
+
+$DISTDIR=Join-Path -Path $WORKDIR -ChildPath "distdir"
+
 if (Test-Path $WORKDIR)
 {
     Write-Host "Working directory already exists"
@@ -62,8 +78,16 @@ finally
     $archive.Close | Out-Null
 }
 
-$S = Get-ChildItem -path $WORKDIR -filter | Select-Object -Expand FullName
+$S = Get-ChildItem -path $WORKDIR | where { $_.Name -match ".*-$PN-.*" } | Select-Object -Expand FullName
 Write-Host "`$S=`"$S`""
+
+$urlAntlr3Codegenerator="https://www.nuget.org/api/v2/package/Antlr3.CodeGenerator/3.5.2-beta1"
+$archiveName="antlr3.codegenerator.3.5.2-beta1.nupkg"
+$fullArchiveName=Join-Path -Path $DISTDIR -ChildPath $archiveName
+
+#Write-Host "$urlAntlr3Codegenerator $fullArchiveName"
+
+WebDownload "$urlAntlr3Codegenerator" "$fullArchiveName"
 
 # prepare sources 
 ## replace files
