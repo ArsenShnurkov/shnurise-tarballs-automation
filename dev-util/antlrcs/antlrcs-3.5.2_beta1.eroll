@@ -1,3 +1,4 @@
 #!/bin/bash
 
-/usr/bin/pash '& "./antlrcs-3.5.2_beta1.ps1"'
+# /usr/bin/pash '& "./antlrcs-3.5.2_beta1.ps1"'
+/usr/bin/msbuild "./antlrcs-3.5.2_beta1.proj"
