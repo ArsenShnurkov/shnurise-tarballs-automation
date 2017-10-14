@@ -17,7 +17,9 @@ if (Test-Path $gzArchiveName)
 else
 {
     # Load sources from github
-    $uri = "https://github.com/antlr/antlrcs/archive/ca331b7109e1faa5a6aa7336bb6281ce9363e62b.tar.gz"
+    $uri = "https://github.com/antlr/antlrcs/tarball/ca331b7109e1faa5a6aa7336bb6281ce9363e62b"
+    Write-Host "Downloading from URL"
+    Write-Host $uri
     $wc = New-Object -TypeName System.Net.WebClient
     $wc.DownloadFile($uri, $gzArchiveName)
 }
@@ -42,7 +44,7 @@ if (Test-Path $WORKDIR)
 }
 else
 {
-    New-Item -ItemType Directory -Force -Path $WORKDIR
+    New-Item -ItemType Directory -Force -Path $WORKDIR | Out-Null
 }
 
 try
@@ -57,7 +59,7 @@ try
 }
 finally
 {
-    $archive.Close
+    $archive.Close | Out-Null
 }
 
 
