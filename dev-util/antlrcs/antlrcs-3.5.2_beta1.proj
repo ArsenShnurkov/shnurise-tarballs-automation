@@ -5,7 +5,8 @@
     <DownloadItems Include="http://www.google.com" />
   </ItemGroup>
   <Target Name="Roll">
-    <Message Text="Build completed" />
+    <Message Text="Build started" />
     <DownloadFilesFromUrl Items="@(DownloadItems)" />
+    <Message Text="Build completed" />
   </Target>
 </Project>

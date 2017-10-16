@@ -1,4 +1,21 @@
 #!/bin/bash
 
 # /usr/bin/pash '& "./antlrcs-3.5.2_beta1.ps1"'
-/usr/bin/msbuild "./antlrcs-3.5.2_beta1.proj"
+#/usr/bin/msbuild "./antlrcs-3.5.2_beta1.proj"
+
+DISTDIR="/var/portage-distdir"
+ARCHIVE_NAME="${DISTDIR}/antlrcs-3.5.2_beta1_p6.tar.gz"
+wget -c https://github.com/antlr/antlrcs/tarball/ca331b7109e1faa5a6aa7336bb6281ce9363e62b -O "${ARCHIVE_NAME}"
+
+CATEGORY="dev-util"
+PN="antlrcs"
+WORKDIR="/var/tmp/tarballs/shnurise/${CATEGORY}/${PN}"
+
+mkdir -p "${WORKDIR}"
+
+# -C, --directory=DIR
+#    change to directory DIR
+tar -zxvf "${ARCHIVE_NAME}" -C "${WORKDIR}"
+
+S="${WORKDIR}/$(ls -1 "${WORKDIR}" | grep "\-antlrcs\-")"
+echo "\${S}=${S}"
