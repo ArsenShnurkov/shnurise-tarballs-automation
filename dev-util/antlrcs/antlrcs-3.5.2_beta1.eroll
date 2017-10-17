@@ -19,3 +19,39 @@ tar -zxvf "${ARCHIVE_NAME}" -C "${WORKDIR}"
 
 S="${WORKDIR}/$(ls -1 "${WORKDIR}" | grep "\-antlrcs\-")"
 echo "\${S}=${S}"
+
+# downloading binary antlrcs
+
+DISTDIR="${WORKDIR}/distdir"
+mkdir -p "${DISTDIR}"
+wget -c https://www.nuget.org/api/v2/package/Antlr3.CodeGenerator/3.5.2-beta1 -O "${DISTDIR}/antlr3.codegenerator.3.5.2-beta1.nupkg"
+unzip -o "${DISTDIR}/antlr3.codegenerator.3.5.2-beta1.nupkg" -d "${WORKDIR}/generator"
+
+COMMAND="/usr/bin/mono ${WORKDIR}/generator/tools/net40/Antlr3.exe"
+find "$S" -iname "*.g3"
+
+DIR=$PWD
+cd ${S}/Antlr3/Grammars
+${COMMAND} ${S}/Antlr3/Grammars/ANTLR.g3
+${COMMAND} ${S}/Antlr3/Grammars/ActionAnalysisLexer.g3
+${COMMAND} ${S}/Antlr3/Grammars/TreeToNFAConverter.g3
+${COMMAND} ${S}/Antlr3/Grammars/ANTLRTreePrinter.g3
+${COMMAND} ${S}/Antlr3/Grammars/AssignTokenTypesWalker.g3
+${COMMAND} ${S}/Antlr3/Grammars/ActionTranslator.g3
+${COMMAND} ${S}/Antlr3/Grammars/DefineGrammarItemsWalker.g3
+${COMMAND} ${S}/Antlr3/Grammars/CodeGenTreeWalker.g3
+${COMMAND} ${S}/Antlr3/Grammars/LeftRecursiveRuleWalker.g3
+cd ${S}/Antlr3.StringTemplate/Language
+${COMMAND} ${S}/Antlr3.StringTemplate/Language/AngleBracketTemplateLexer.g3
+${COMMAND} ${S}/Antlr3.StringTemplate/Language/Group.g3
+${COMMAND} ${S}/Antlr3.StringTemplate/Language/Template.g3
+${COMMAND} ${S}/Antlr3.StringTemplate/Language/Interface.g3
+${COMMAND} ${S}/Antlr3.StringTemplate/Language/Action.g3
+${COMMAND} ${S}/Antlr3.StringTemplate/Language/ActionEvaluator.g3
+cd ${S}/Antlr4.StringTemplate/Compiler
+${COMMAND} ${S}/Antlr4.StringTemplate/Compiler/TemplateParser.g3
+${COMMAND} ${S}/Antlr4.StringTemplate/Compiler/Group.g3
+${COMMAND} ${S}/Antlr4.StringTemplate/Compiler/CodeGenerator.g3
+cd ${S}/build/Validation
+${COMMAND} ${S}/build/Validation/Grammar.g3
+cd ${DIR}
