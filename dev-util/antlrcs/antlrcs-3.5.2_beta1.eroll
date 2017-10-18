@@ -49,13 +49,13 @@ ${COMMAND} ${S}/Antlr3/Grammars/ActionTranslator.g3
 ${COMMAND} ${S}/Antlr3/Grammars/DefineGrammarItemsWalker.g3
 ${COMMAND} ${S}/Antlr3/Grammars/CodeGenTreeWalker.g3
 ${COMMAND} ${S}/Antlr3/Grammars/LeftRecursiveRuleWalker.g3
-cd ${S}/Antlr3.StringTemplate/Language
-${COMMAND} ${S}/Antlr3.StringTemplate/Language/AngleBracketTemplateLexer.g3
-${COMMAND} ${S}/Antlr3.StringTemplate/Language/Group.g3
-${COMMAND} ${S}/Antlr3.StringTemplate/Language/Template.g3
-${COMMAND} ${S}/Antlr3.StringTemplate/Language/Interface.g3
-${COMMAND} ${S}/Antlr3.StringTemplate/Language/Action.g3
-${COMMAND} ${S}/Antlr3.StringTemplate/Language/ActionEvaluator.g3
+#cd ${S}/Antlr3.StringTemplate/Language
+#${COMMAND} ${S}/Antlr3.StringTemplate/Language/AngleBracketTemplateLexer.g3
+#${COMMAND} ${S}/Antlr3.StringTemplate/Language/Group.g3
+#${COMMAND} ${S}/Antlr3.StringTemplate/Language/Template.g3
+#${COMMAND} ${S}/Antlr3.StringTemplate/Language/Interface.g3
+#${COMMAND} ${S}/Antlr3.StringTemplate/Language/Action.g3
+#${COMMAND} ${S}/Antlr3.StringTemplate/Language/ActionEvaluator.g3
 cd ${S}/Antlr4.StringTemplate/Compiler
 ${COMMAND} ${S}/Antlr4.StringTemplate/Compiler/TemplateParser.g3
 ${COMMAND} ${S}/Antlr4.StringTemplate/Compiler/Group.g3
@@ -66,18 +66,50 @@ cd ${DIR}
 
 fi
 
+
+# remove unnecessary files
+rm "${S}/Runtime/Antlr3.Runtime.Debug/ParserDebugger.cs"
+rm "${S}/Antlr4.StringTemplate/Debug/DebugTemplate.cs"
+rm -rf "${S}/Antlr3.Runtime.Visualizer"
+rm -rf "${S}/Antlr3.StringTemplate"
+rm -rf "${S}/Antlr3.Targets"
+rm -rf "${S}/Antlr3.Test"
+rm -rf "${S}/Antlr4.StringTemplate.Visualizer"
+rm -rf "${S}/Antlr4.Test.StringTemplate"
+rm -rf "${S}/Reference"
+rm -rf "${S}/Runtime/Antlr3.Runtime.JavaExtensions"
+rm -rf "${S}/Runtime/Antlr3.Runtime.Test"
+rm -rf "${S}/Antlr3.Runtime.Test"
+rm -rf "${S}/TestResults"
+rm -rf "${S}/build"
+rm -rf "${S}/.gitattributes"
+rm -rf "${S}/.gitignore"
+rm -rf "${S}/.gitmodules"
+rm -rf "${S}/Antlr3.ruleset"
+rm -rf "${S}/Antlr3.sln"
+rm -rf "${S}/Antlr3.vsmdi"
+rm -rf "${S}/AntlrTestConfig.testrunconfig"
+rm -rf "${S}/Directory.Build.props"
+rm -rf "${S}/Directory.Build.targets"
+rm -rf "${S}/NuGet.config.bootstrap"
+rm -rf "${S}/PublishingProcess.txt"
+rm -rf "${S}/appveyor.yml"
+find "${S}" -type f -iname "*.csproj" -exec rm {} \;
+
+if true; then
+
 mkdir -p ${S}/bin/Debug
 cd ${S}/Runtime/Antlr3.Runtime
 mono /usr/lib/mono/4.5/csc.exe /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.dll /debug+ /debug:full /optimize- "/out:${S}/bin/Debug/Antlr.Runtime.dll" /subsystemversion:6.00 /target:library /utf8output /recurse:*.cs
 cd ${DIR}
 
 cd ${S}/Runtime/Antlr3.Runtime.Debug
-rm ParserDebugger.cs
+#rm ParserDebugger.cs
 mono /usr/lib/mono/4.5/csc.exe /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.dll /reference:${S}/bin/Debug/Antlr.Runtime.dll /debug+ /debug:full /optimize- /out:${S}/bin/Debug/Antlr.Runtime.Debug.dll /subsystemversion:6.00 /target:library /utf8output /recurse:*.cs
 cd ${DIR}
 
 cd ${S}/Antlr4.StringTemplate
-rm Debug/DebugTemplate.cs
+#rm Debug/DebugTemplate.cs
 mono /usr/lib/mono/4.5/csc.exe /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.dll /reference:${S}/bin/Debug/Antlr.Runtime.dll /debug+ /debug:full /optimize- /out:${S}/bin/Debug/Antlr4.StringTemplate.dll /subsystemversion:6.00 /target:library /utf8output /recurse:*.cs
 cd ${DIR}
 
@@ -92,3 +124,5 @@ cd ${S}/Antlr3/Grammars
 ${COMMAND2} ${S}/Antlr3/Grammars/ANTLR.g3
 # System.IO.FileNotFoundException: No such group file: /var/tmp/tarballs/shnurise/dev-util/antlrcs/antlr-antlrcs-ca331b7/bin/Debug/Tool/Templates/messages/languages/en.stg
 cd ${DIR}
+
+fi
