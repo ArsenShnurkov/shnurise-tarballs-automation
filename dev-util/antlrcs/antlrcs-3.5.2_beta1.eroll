@@ -1,28 +1,36 @@
 #!/bin/bash
 
+DOWNLOAD=false
+DOWNLOAD=true
+
+PROCESS_GRAMMARS=false
+PROCESS_GRAMMARS=true
+
+COMPILE=false
+#COMPILE=true
+
 DISTDIR="/var/portage-distdir"
 ARCHIVE_NAME="${DISTDIR}/antlrcs-3.5.2_beta1_p6.tar.gz"
 CATEGORY="dev-util"
 PN="antlrcs"
+PV="3.5.2_beta1"
 WORKDIR="/var/tmp/tarballs/shnurise/${CATEGORY}/${PN}"
+DISTDIR="${WORKDIR}/distdir"
 
-if true; then
+OUTPUT_PATH=Reference/antlr3/tool/src/main/resources/org/antlr
+
+if $DOWNLOAD ; then
+
+rm -rf ${WORKDIR}
+
+mkdir -p "${WORKDIR}"
+mkdir -p "${DISTDIR}"
 
 # /usr/bin/pash '& "./antlrcs-3.5.2_beta1.ps1"'
 #/usr/bin/msbuild "./antlrcs-3.5.2_beta1.proj"
 
+# downloading source code
 wget -c https://github.com/antlr/antlrcs/tarball/ca331b7109e1faa5a6aa7336bb6281ce9363e62b -O "${ARCHIVE_NAME}"
-
-
-mkdir -p "${WORKDIR}"
-
-
-# downloading binary antlrcs
-
-DISTDIR="${WORKDIR}/distdir"
-mkdir -p "${DISTDIR}"
-wget -c https://www.nuget.org/api/v2/package/Antlr3.CodeGenerator/3.5.2-beta1 -O "${DISTDIR}/antlr3.codegenerator.3.5.2-beta1.nupkg"
-unzip -o "${DISTDIR}/antlr3.codegenerator.3.5.2-beta1.nupkg" -d "${WORKDIR}/generator"
 
 # -C, --directory=DIR
 #    change to directory DIR
@@ -33,7 +41,31 @@ fi
 S="${WORKDIR}/$(ls -1 "${WORKDIR}" | grep "\-antlrcs\-")"
 echo "\${S}=${S}"
 
-if true; then
+if $DOWNLOAD ; then
+
+#download templates
+git clone https://github.com/antlr/antlr3.git ${S}/Reference/antlr3
+find "${S}/Reference/antlr3" -type f -not -iname "*.stg" -exec rm -f {} \;
+find "${S}/Reference" -type d -empty -delete
+
+# downloading binary antlrcs for generating missing sources
+wget -c https://www.nuget.org/api/v2/package/Antlr3.CodeGenerator/3.5.2-beta1 -O "${DISTDIR}/antlr3.codegenerator.3.5.2-beta1.nupkg"
+unzip -o "${DISTDIR}/antlr3.codegenerator.3.5.2-beta1.nupkg" -d "${WORKDIR}/generator"
+
+fi
+
+#find ${WORKDIR}/generator
+
+mv ${S}/$OUTPUT_PATH/tool ${S}/$OUTPUT_PATH/Tool
+mv ${S}/$OUTPUT_PATH/Tool/templates ${S}/$OUTPUT_PATH/Tool/Templates
+mv ${S}/$OUTPUT_PATH/codegen ${S}/$OUTPUT_PATH/Codegen
+mv ${S}/$OUTPUT_PATH/Codegen/templates ${S}/$OUTPUT_PATH/Codegen/Templates
+rm -rf ${S}/Reference/antlr3/gunit
+rm -rf ${S}/Reference/antlr3/runtime
+
+ls -1 ${S}/$OUTPUT_PATH/Tool/Templates
+
+if $PROCESS_GRAMMARS; then
 
 COMMAND="/usr/bin/mono ${WORKDIR}/generator/tools/net40/Antlr3.exe"
 find "$S" -iname "*.g3"
@@ -72,11 +104,9 @@ rm "${S}/Runtime/Antlr3.Runtime.Debug/ParserDebugger.cs"
 rm "${S}/Antlr4.StringTemplate/Debug/DebugTemplate.cs"
 rm -rf "${S}/Antlr3.Runtime.Visualizer"
 rm -rf "${S}/Antlr3.StringTemplate"
-rm -rf "${S}/Antlr3.Targets"
 rm -rf "${S}/Antlr3.Test"
 rm -rf "${S}/Antlr4.StringTemplate.Visualizer"
 rm -rf "${S}/Antlr4.Test.StringTemplate"
-rm -rf "${S}/Reference"
 rm -rf "${S}/Runtime/Antlr3.Runtime.JavaExtensions"
 rm -rf "${S}/Runtime/Antlr3.Runtime.Test"
 rm -rf "${S}/Antlr3.Runtime.Test"
@@ -95,34 +125,53 @@ rm -rf "${S}/NuGet.config.bootstrap"
 rm -rf "${S}/PublishingProcess.txt"
 rm -rf "${S}/appveyor.yml"
 find "${S}" -type f -iname "*.csproj" -exec rm {} \;
+find "${S}/Antlr3.Targets" -type f -iname "*.props" -exec rm {} \;
+find "${S}/Antlr3.Targets" -type f -iname "*.targets" -exec rm {} \;
+rm ${S}/Antlr3/app.config
+find ${S}/Antlr3.Targets/* -type d -not -iname "Antlr3.Targets.CSharp3" -exec rm -rf {} \; 
+find ${S}/$OUTPUT_PATH/Codegen/Templates/* -type d -not -iname "CSharp3" -exec rm -rf {} \;
 
-if true; then
+if $COMPILE ; then
 
-mkdir -p ${S}/bin/Debug
+mkdir -p ${S}/${OUTPUT_PATH}
 cd ${S}/Runtime/Antlr3.Runtime
-mono /usr/lib/mono/4.5/csc.exe /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.dll /debug+ /debug:full /optimize- "/out:${S}/bin/Debug/Antlr.Runtime.dll" /subsystemversion:6.00 /target:library /utf8output /recurse:*.cs
+mono /usr/lib/mono/4.5/csc.exe /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.dll /debug+ /debug:full /optimize- "/out:${S}/${OUTPUT_PATH}/Antlr.Runtime.dll" /subsystemversion:6.00 /target:library /utf8output /recurse:*.cs
 cd ${DIR}
 
 cd ${S}/Runtime/Antlr3.Runtime.Debug
 #rm ParserDebugger.cs
-mono /usr/lib/mono/4.5/csc.exe /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.dll /reference:${S}/bin/Debug/Antlr.Runtime.dll /debug+ /debug:full /optimize- /out:${S}/bin/Debug/Antlr.Runtime.Debug.dll /subsystemversion:6.00 /target:library /utf8output /recurse:*.cs
+mono /usr/lib/mono/4.5/csc.exe /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.dll /reference:${S}/${OUTPUT_PATH}/Antlr.Runtime.dll /debug+ /debug:full /optimize- /out:${S}/${OUTPUT_PATH}/Antlr.Runtime.Debug.dll /subsystemversion:6.00 /target:library /utf8output /recurse:*.cs
 cd ${DIR}
 
 cd ${S}/Antlr4.StringTemplate
 #rm Debug/DebugTemplate.cs
-mono /usr/lib/mono/4.5/csc.exe /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.dll /reference:${S}/bin/Debug/Antlr.Runtime.dll /debug+ /debug:full /optimize- /out:${S}/bin/Debug/Antlr4.StringTemplate.dll /subsystemversion:6.00 /target:library /utf8output /recurse:*.cs
+mono /usr/lib/mono/4.5/csc.exe /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.dll /reference:${S}/${OUTPUT_PATH}/Antlr.Runtime.dll /debug+ /debug:full /optimize- /out:${S}/${OUTPUT_PATH}/Antlr4.StringTemplate.dll /subsystemversion:6.00 /target:library /utf8output /recurse:*.cs
 cd ${DIR}
 
 cd ${S}/Antlr3
-mono /usr/lib/mono/4.5/csc.exe /define:NETSTANDARD /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.Xml.Linq.dll /reference:/usr/lib64/mono/4.6-api/System.dll /reference:${S}/bin/Debug/Antlr.Runtime.dll /reference:${S}/bin/Debug/Antlr.Runtime.Debug.dll /reference:${S}/bin/Debug/Antlr4.StringTemplate.dll /debug+ /debug:full /optimize- /out:${S}/bin/Debug/Antlr3.exe /subsystemversion:6.00 /target:exe /utf8output /recurse:*.cs
+mono /usr/lib/mono/4.5/csc.exe /define:NETSTANDARD /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.Xml.Linq.dll /reference:/usr/lib64/mono/4.6-api/System.dll /reference:${S}/${OUTPUT_PATH}/Antlr.Runtime.dll /reference:${S}/${OUTPUT_PATH}/Antlr.Runtime.Debug.dll /reference:${S}/${OUTPUT_PATH}/Antlr4.StringTemplate.dll /debug+ /debug:full /optimize- /out:${S}/${OUTPUT_PATH}/Antlr3.exe /subsystemversion:6.00 /target:exe /utf8output /recurse:*.cs
 cd ${DIR}
 
-find ${S}/bin/Debug
+cd ${S}/Antlr3.Targets/Antlr3.Targets.CSharp3
+mkdir -p ${S}/${OUTPUT_PATH}/Targets
+mono /usr/lib/mono/4.5/csc.exe /define:NETSTANDARD /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.dll /reference:${S}/${OUTPUT_PATH}/Antlr3.exe /reference:${S}/${OUTPUT_PATH}/Antlr4.StringTemplate.dll /debug+ /debug:full /optimize- /out:${S}/${OUTPUT_PATH}/Targets/Antlr3.Targets.CSharp3.dll /subsystemversion:6.00 /target:Library /utf8output /recurse:*.cs
+cd ${DIR}
 
-COMMAND2="/usr/bin/mono /var/tmp/tarballs/shnurise/dev-util/antlrcs/antlr-antlrcs-ca331b7/bin/Debug/Antlr3.exe"
+COMMAND2="/usr/bin/mono ${S}/${OUTPUT_PATH}/Antlr3.exe"
 cd ${S}/Antlr3/Grammars
 ${COMMAND2} ${S}/Antlr3/Grammars/ANTLR.g3
-# System.IO.FileNotFoundException: No such group file: /var/tmp/tarballs/shnurise/dev-util/antlrcs/antlr-antlrcs-ca331b7/bin/Debug/Tool/Templates/messages/languages/en.stg
+# cannot create target Antlr3.Targets.CSharp3Target code generator
+# https://github.com/antlr/antlrcs/blob/master/Antlr3.Targets/Antlr3.Targets.CSharp2/CSharp2Target.cs
+# https://github.com/antlr/antlrcs/blob/master/Antlr3.Targets/Antlr3.Targets.CSharp3/CSharp3Target.cs
 cd ${DIR}
+# meld ${S}/Antlr3.Targets/Antlr3.Targets.CSharp2/CSharp2Target.cs ${S}/Antlr3.Targets/Antlr3.Targets.CSharp3/CSharp3Target.cs
+# no significant difference
+
+#need to build AntlrBuildTask too
 
 fi
+
+#meld ${WORKDIR}/generator/tools/net40 ${S}/${OUTPUT_PATH}
+
+tar -czvf ${WORKDIR}/${PN}-${PV}.tar.gz -C ${S} .
+cd ${WORKDIR}
