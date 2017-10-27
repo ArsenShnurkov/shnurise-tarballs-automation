@@ -1,0 +1,782 @@
+diff --git a/src/1Script_Mono.sln b/src/1Script_Mono.sln
+index 50686c2..d42caad 100644
+--- a/src/1Script_Mono.sln
++++ b/src/1Script_Mono.sln
+@@ -1,350 +1,181 @@
+-Microsoft Visual Studio Solution File, Format Version 12.00
+-# Visual Studio 15
+-VisualStudioVersion = 15.0.26730.10
+-MinimumVisualStudioVersion = 10.0.40219.1
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptEngine", "ScriptEngine\ScriptEngine.csproj", "{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}"
+-EndProject
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptEngine.HostedScript", "ScriptEngine.HostedScript\ScriptEngine.HostedScript.csproj", "{F09A46BD-5737-45E7-BA60-A47C9F7821A9}"
+-EndProject
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "oscript", "oscript\oscript.csproj", "{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B} = {795AA2F5-3074-4BC5-A30F-1B6354044D9B}
+-	EndProjectSection
+-EndProject
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandaloneRunner", "StandaloneRunner\StandaloneRunner.csproj", "{795AA2F5-3074-4BC5-A30F-1B6354044D9B}"
+-EndProject
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTests", "NUnitTests\NUnitTests.csproj", "{93ACC849-E7E1-4695-B59D-54B3737E48A6}"
+-EndProject
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Component", "Component\Component.csproj", "{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}"
+-EndProject
+-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{00800E89-2396-4457-AB79-77BECD4FA837}"
+-EndProject
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "oscriptTests", "oscriptTest\oscriptTests.csproj", "{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}"
+-EndProject
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneScript.DebugProtocol", "OneScript.DebugProtocol\OneScript.DebugProtocol.csproj", "{727A498F-BF50-42F8-8523-40C0B5B1B233}"
+-EndProject
+-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebugServer", "DebugServer\DebugServer.csproj", "{C979F151-AA29-47E4-B020-3039BA0986D9}"
+-EndProject
+-Global
+-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+-		Debug|Any CPU = Debug|Any CPU
+-		Debug|Mixed Platforms = Debug|Mixed Platforms
+-		Debug|Win32 = Debug|Win32
+-		Debug|x86 = Debug|x86
+-		Release|Any CPU = Release|Any CPU
+-		Release|Mixed Platforms = Release|Mixed Platforms
+-		Release|Win32 = Release|Win32
+-		Release|x86 = Release|x86
+-	EndGlobalSection
+-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+-		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+-		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+-		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+-		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Debug|Mixed Platforms.Build.0 = Debug|x86
+-		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Debug|Win32.ActiveCfg = Debug|x86
+-		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Debug|Win32.Build.0 = Debug|x86
+-		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Debug|x86.ActiveCfg = Debug|x86
+-		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Debug|x86.Build.0 = Debug|x86
+-		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+-		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Release|Any CPU.Build.0 = Release|Any CPU
+-		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Release|Mixed Platforms.ActiveCfg = Release|x86
+-		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Release|Mixed Platforms.Build.0 = Release|x86
+-		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Release|Win32.ActiveCfg = Release|x86
+-		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Release|Win32.Build.0 = Release|x86
+-		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Release|x86.ActiveCfg = Release|x86
+-		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Release|x86.Build.0 = Release|x86
+-		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+-		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+-		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+-		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Debug|Mixed Platforms.Build.0 = Debug|x86
+-		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Debug|Win32.ActiveCfg = Debug|x86
+-		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Debug|Win32.Build.0 = Debug|x86
+-		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Debug|x86.ActiveCfg = Debug|x86
+-		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Debug|x86.Build.0 = Debug|x86
+-		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+-		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Release|Any CPU.Build.0 = Release|Any CPU
+-		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Release|Mixed Platforms.ActiveCfg = Release|x86
+-		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Release|Mixed Platforms.Build.0 = Release|x86
+-		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Release|Win32.ActiveCfg = Release|x86
+-		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Release|Win32.Build.0 = Release|x86
+-		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Release|x86.ActiveCfg = Release|x86
+-		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Release|x86.Build.0 = Release|x86
+-		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+-		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+-		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+-		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Debug|Mixed Platforms.Build.0 = Debug|x86
+-		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Debug|Win32.ActiveCfg = Debug|x86
+-		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Debug|Win32.Build.0 = Debug|x86
+-		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Debug|x86.ActiveCfg = Debug|x86
+-		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Debug|x86.Build.0 = Debug|x86
+-		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+-		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Release|Any CPU.Build.0 = Release|Any CPU
+-		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Release|Mixed Platforms.ActiveCfg = Release|x86
+-		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Release|Mixed Platforms.Build.0 = Release|x86
+-		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Release|Win32.ActiveCfg = Release|x86
+-		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Release|Win32.Build.0 = Release|x86
+-		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Release|x86.ActiveCfg = Release|x86
+-		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Release|x86.Build.0 = Release|x86
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Debug|Win32.ActiveCfg = Debug|Any CPU
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Debug|Win32.Build.0 = Debug|Any CPU
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Debug|x86.ActiveCfg = Debug|x86
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Debug|x86.Build.0 = Debug|x86
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Release|Any CPU.Build.0 = Release|Any CPU
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Release|Win32.ActiveCfg = Release|Any CPU
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Release|Win32.Build.0 = Release|Any CPU
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Release|x86.ActiveCfg = Release|x86
+-		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Release|x86.Build.0 = Release|x86
+-		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+-		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+-		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+-		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+-		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Debug|Win32.ActiveCfg = Debug|Any CPU
+-		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Debug|Win32.Build.0 = Debug|Any CPU
+-		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Debug|x86.ActiveCfg = Debug|Any CPU
+-		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Debug|x86.Build.0 = Debug|Any CPU
+-		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+-		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Release|Any CPU.Build.0 = Release|Any CPU
+-		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+-		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+-		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Release|Win32.ActiveCfg = Release|Any CPU
+-		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Release|Win32.Build.0 = Release|Any CPU
+-		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Release|x86.ActiveCfg = Release|Any CPU
+-		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Release|x86.Build.0 = Release|Any CPU
+-		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+-		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+-		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+-		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+-		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Debug|Win32.ActiveCfg = Debug|Any CPU
+-		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Debug|Win32.Build.0 = Debug|Any CPU
+-		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Debug|x86.ActiveCfg = Debug|Any CPU
+-		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Debug|x86.Build.0 = Debug|Any CPU
+-		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+-		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Release|Any CPU.Build.0 = Release|Any CPU
+-		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+-		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+-		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Release|Win32.ActiveCfg = Release|Any CPU
+-		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Release|Win32.Build.0 = Release|Any CPU
+-		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Release|x86.ActiveCfg = Release|Any CPU
+-		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Release|x86.Build.0 = Release|Any CPU
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}.Debug|Win32.ActiveCfg = Debug|Any CPU
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}.Debug|Win32.Build.0 = Debug|Any CPU
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}.Debug|x86.ActiveCfg = Debug|Any CPU
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}.Debug|x86.Build.0 = Debug|Any CPU
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}.Release|Any CPU.Build.0 = Release|Any CPU
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}.Release|Win32.ActiveCfg = Release|Any CPU
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}.Release|Win32.Build.0 = Release|Any CPU
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}.Release|x86.ActiveCfg = Release|Any CPU
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB}.Release|x86.Build.0 = Release|Any CPU
+-		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+-		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Debug|Any CPU.Build.0 = Debug|Any CPU
+-		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+-		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+-		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Debug|Win32.ActiveCfg = Debug|Any CPU
+-		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Debug|Win32.Build.0 = Debug|Any CPU
+-		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Debug|x86.ActiveCfg = Debug|Any CPU
+-		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Debug|x86.Build.0 = Debug|Any CPU
+-		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Release|Any CPU.ActiveCfg = Release|Any CPU
+-		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Release|Any CPU.Build.0 = Release|Any CPU
+-		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+-		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+-		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Release|Win32.ActiveCfg = Release|Any CPU
+-		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Release|Win32.Build.0 = Release|Any CPU
+-		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Release|x86.ActiveCfg = Release|Any CPU
+-		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Release|x86.Build.0 = Release|Any CPU
+-		{C979F151-AA29-47E4-B020-3039BA0986D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+-		{C979F151-AA29-47E4-B020-3039BA0986D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+-		{C979F151-AA29-47E4-B020-3039BA0986D9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+-		{C979F151-AA29-47E4-B020-3039BA0986D9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+-		{C979F151-AA29-47E4-B020-3039BA0986D9}.Debug|Win32.ActiveCfg = Debug|Any CPU
+-		{C979F151-AA29-47E4-B020-3039BA0986D9}.Debug|Win32.Build.0 = Debug|Any CPU
+-		{C979F151-AA29-47E4-B020-3039BA0986D9}.Debug|x86.ActiveCfg = Debug|Any CPU
+-		{C979F151-AA29-47E4-B020-3039BA0986D9}.Debug|x86.Build.0 = Debug|Any CPU
+-		{C979F151-AA29-47E4-B020-3039BA0986D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+-		{C979F151-AA29-47E4-B020-3039BA0986D9}.Release|Any CPU.Build.0 = Release|Any CPU
+-		{C979F151-AA29-47E4-B020-3039BA0986D9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+-		{C979F151-AA29-47E4-B020-3039BA0986D9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+-		{C979F151-AA29-47E4-B020-3039BA0986D9}.Release|Win32.ActiveCfg = Release|Any CPU
+-		{C979F151-AA29-47E4-B020-3039BA0986D9}.Release|Win32.Build.0 = Release|Any CPU
+-		{C979F151-AA29-47E4-B020-3039BA0986D9}.Release|x86.ActiveCfg = Release|Any CPU
+-		{C979F151-AA29-47E4-B020-3039BA0986D9}.Release|x86.Build.0 = Release|Any CPU
+-	EndGlobalSection
+-	GlobalSection(SolutionProperties) = preSolution
+-		HideSolutionNode = FALSE
+-	EndGlobalSection
+-	GlobalSection(NestedProjects) = preSolution
+-		{69A7869C-203C-4F09-AC3F-04E9B52AD7AB} = {00800E89-2396-4457-AB79-77BECD4FA837}
+-	EndGlobalSection
+-	GlobalSection(ExtensibilityGlobals) = postSolution
+-		SolutionGuid = {AE093311-3D4C-4D34-A610-573FC8E6A447}
+-	EndGlobalSection
+-	GlobalSection(MonoDevelopProperties) = preSolution
+-		Policies = $0
+-		$0.DotNetNamingPolicy = $1
+-		$1.DirectoryNamespaceAssociation = None
+-		$1.ResourceNamePolicy = FileFormatDefault
+-		$0.TextStylePolicy = $7
+-		$2.inheritsSet = null
+-		$2.scope = text/x-csharp
+-		$2.FileWidth = 120
+-		$2.inheritsScope = text/plain
+-		$2.TabsToSpaces = False
+-		$0.CSharpFormattingPolicy = $3
+-		$3.AfterDelegateDeclarationParameterComma = True
+-		$3.inheritsSet = Mono
+-		$3.inheritsScope = text/x-csharp
+-		$3.scope = text/x-csharp
+-		$3.NewLinesForBracesInProperties = True
+-		$3.NewLinesForBracesInAccessors = True
+-		$3.NewLinesForBracesInControlBlocks = True
+-		$3.SpacingAfterMethodDeclarationName = False
+-		$3.SpaceAfterMethodCallName = False
+-		$3.SpaceBeforeOpenSquareBracket = False
+-		$4.FileWidth = 120
+-		$4.inheritsSet = VisualStudio
+-		$4.inheritsScope = text/plain
+-		$4.scope = text/plain
+-		$5.inheritsSet = null
+-		$5.scope = application/config+xml
+-		$0.XmlFormattingPolicy = $8
+-		$6.inheritsSet = Mono
+-		$6.scope = application/xml
+-		$6.inheritsScope = application/xml
+-		$7.inheritsSet = null
+-		$7.scope = application/xml
+-		$8.inheritsSet = Mono
+-		$8.inheritsScope = application/xml
+-		$8.scope = application/xml
+-		$0.StandardHeader = $9
+-		$9.Text = 
+-		$9.IncludeInNewFiles = True
+-		$0.NameConventionPolicy = $10
+-		$10.Rules = $11
+-		$11.NamingRule = $31
+-		$12.Name = Type Parameters
+-		$12.AffectedEntity = TypeParameter
+-		$12.VisibilityMask = VisibilityMask
+-		$12.NamingStyle = PascalCase
+-		$12.IncludeInstanceMembers = True
+-		$12.IncludeStaticEntities = True
+-		$12.RequiredPrefixes = $34
+-		$34.String = T
+-		$12.RequiredSuffixes = $35
+-		$35.String = Exception
+-		$13.Name = Types
+-		$13.AffectedEntity = Class, Struct, Enum, Delegate
+-		$13.VisibilityMask = Public
+-		$13.NamingStyle = PascalCase
+-		$13.IncludeInstanceMembers = True
+-		$13.IncludeStaticEntities = True
+-		$14.Name = Interfaces
+-		$14.RequiredPrefixes = $15
+-		$15.String = I
+-		$14.AffectedEntity = Interface
+-		$14.VisibilityMask = Public
+-		$14.NamingStyle = PascalCase
+-		$14.IncludeInstanceMembers = True
+-		$14.IncludeStaticEntities = True
+-		$16.Name = Attributes
+-		$16.RequiredSuffixes = $17
+-		$17.String = Attribute
+-		$16.AffectedEntity = CustomAttributes
+-		$16.VisibilityMask = Public
+-		$16.NamingStyle = PascalCase
+-		$16.IncludeInstanceMembers = True
+-		$16.IncludeStaticEntities = True
+-		$18.Name = Event Arguments
+-		$18.RequiredSuffixes = $19
+-		$19.String = EventArgs
+-		$18.AffectedEntity = CustomEventArgs
+-		$18.VisibilityMask = Public
+-		$18.NamingStyle = PascalCase
+-		$18.IncludeInstanceMembers = True
+-		$18.IncludeStaticEntities = True
+-		$20.Name = Exceptions
+-		$20.RequiredSuffixes = $21
+-		$21.String = Exception
+-		$20.AffectedEntity = CustomExceptions
+-		$20.VisibilityMask = VisibilityMask
+-		$20.NamingStyle = PascalCase
+-		$20.IncludeInstanceMembers = True
+-		$20.IncludeStaticEntities = True
+-		$22.Name = Methods
+-		$22.AffectedEntity = Methods
+-		$22.VisibilityMask = Protected, Public
+-		$22.NamingStyle = PascalCase
+-		$22.IncludeInstanceMembers = True
+-		$22.IncludeStaticEntities = True
+-		$23.Name = Static Readonly Fields
+-		$23.AffectedEntity = ReadonlyField
+-		$23.VisibilityMask = Protected, Public
+-		$23.NamingStyle = PascalCase
+-		$23.IncludeInstanceMembers = False
+-		$23.IncludeStaticEntities = True
+-		$24.Name = Fields
+-		$24.AffectedEntity = Field
+-		$24.VisibilityMask = Protected, Public
+-		$24.NamingStyle = PascalCase
+-		$24.IncludeInstanceMembers = True
+-		$24.IncludeStaticEntities = True
+-		$25.Name = ReadOnly Fields
+-		$25.AffectedEntity = ReadonlyField
+-		$25.VisibilityMask = Protected, Public
+-		$25.NamingStyle = PascalCase
+-		$25.IncludeInstanceMembers = True
+-		$25.IncludeStaticEntities = False
+-		$26.Name = Constant Fields
+-		$26.AffectedEntity = ConstantField
+-		$26.VisibilityMask = Protected, Public
+-		$26.NamingStyle = PascalCase
+-		$26.IncludeInstanceMembers = True
+-		$26.IncludeStaticEntities = True
+-		$27.Name = Properties
+-		$27.AffectedEntity = Property
+-		$27.VisibilityMask = Protected, Public
+-		$27.NamingStyle = PascalCase
+-		$27.IncludeInstanceMembers = True
+-		$27.IncludeStaticEntities = True
+-		$28.Name = Events
+-		$28.AffectedEntity = Event
+-		$28.VisibilityMask = Protected, Public
+-		$28.NamingStyle = PascalCase
+-		$28.IncludeInstanceMembers = True
+-		$28.IncludeStaticEntities = True
+-		$29.Name = Enum Members
+-		$29.AffectedEntity = EnumMember
+-		$29.VisibilityMask = VisibilityMask
+-		$29.NamingStyle = PascalCase
+-		$29.IncludeInstanceMembers = True
+-		$29.IncludeStaticEntities = True
+-		$30.Name = Parameters
+-		$30.AffectedEntity = Parameter
+-		$30.VisibilityMask = VisibilityMask
+-		$30.NamingStyle = CamelCase
+-		$30.IncludeInstanceMembers = True
+-		$30.IncludeStaticEntities = True
+-		$31.Name = Type Parameters
+-		$31.RequiredPrefixes = $32
+-		$32.String = T
+-		$31.AffectedEntity = TypeParameter
+-		$31.VisibilityMask = VisibilityMask
+-		$31.NamingStyle = PascalCase
+-		$31.IncludeInstanceMembers = True
+-		$31.IncludeStaticEntities = True
+-		$0.VersionControlPolicy = $33
+-		$33.inheritsSet = Mono
+-	EndGlobalSection
+-EndGlobal
++﻿
++Microsoft Visual Studio Solution File, Format Version 12.00
++# Visual Studio 2012
++VisualStudioVersion = 15.0.26730.10
++MinimumVisualStudioVersion = 10.0.40219.1
++Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptEngine", "ScriptEngine\ScriptEngine.csproj", "{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}"
++EndProject
++Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptEngine.HostedScript", "ScriptEngine.HostedScript\ScriptEngine.HostedScript.csproj", "{F09A46BD-5737-45E7-BA60-A47C9F7821A9}"
++EndProject
++Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "oscript", "oscript\oscript.csproj", "{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}"
++	ProjectSection(ProjectDependencies) = postProject
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B} = {795AA2F5-3074-4BC5-A30F-1B6354044D9B}
++	EndProjectSection
++EndProject
++Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandaloneRunner", "StandaloneRunner\StandaloneRunner.csproj", "{795AA2F5-3074-4BC5-A30F-1B6354044D9B}"
++EndProject
++Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Component", "Component\Component.csproj", "{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}"
++EndProject
++Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneScript.DebugProtocol", "OneScript.DebugProtocol\OneScript.DebugProtocol.csproj", "{727A498F-BF50-42F8-8523-40C0B5B1B233}"
++EndProject
++Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebugServer", "DebugServer\DebugServer.csproj", "{C979F151-AA29-47E4-B020-3039BA0986D9}"
++EndProject
++Global
++	GlobalSection(SolutionConfigurationPlatforms) = preSolution
++		Debug|Any CPU = Debug|Any CPU
++		Debug|Mixed Platforms = Debug|Mixed Platforms
++		Debug|Win32 = Debug|Win32
++		Debug|x86 = Debug|x86
++		Release|Any CPU = Release|Any CPU
++		Release|Mixed Platforms = Release|Mixed Platforms
++		Release|Win32 = Release|Win32
++		Release|x86 = Release|x86
++	EndGlobalSection
++	GlobalSection(ProjectConfigurationPlatforms) = postSolution
++		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
++		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
++		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Debug|Mixed Platforms.Build.0 = Debug|x86
++		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Debug|Win32.ActiveCfg = Debug|x86
++		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Debug|Win32.Build.0 = Debug|x86
++		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Debug|x86.ActiveCfg = Debug|x86
++		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Debug|x86.Build.0 = Debug|x86
++		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
++		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Release|Any CPU.Build.0 = Release|Any CPU
++		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Release|Mixed Platforms.ActiveCfg = Release|x86
++		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Release|Mixed Platforms.Build.0 = Release|x86
++		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Release|Win32.ActiveCfg = Release|x86
++		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Release|Win32.Build.0 = Release|x86
++		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Release|x86.ActiveCfg = Release|x86
++		{2590E2BB-CC1F-4775-80ED-451F45C9A4F1}.Release|x86.Build.0 = Release|x86
++		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Debug|Any CPU.Build.0 = Debug|Any CPU
++		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
++		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
++		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Debug|Win32.ActiveCfg = Debug|Any CPU
++		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Debug|Win32.Build.0 = Debug|Any CPU
++		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Debug|x86.ActiveCfg = Debug|Any CPU
++		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Debug|x86.Build.0 = Debug|Any CPU
++		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Release|Any CPU.ActiveCfg = Release|Any CPU
++		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Release|Any CPU.Build.0 = Release|Any CPU
++		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
++		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Release|Mixed Platforms.Build.0 = Release|Any CPU
++		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Release|Win32.ActiveCfg = Release|Any CPU
++		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Release|Win32.Build.0 = Release|Any CPU
++		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Release|x86.ActiveCfg = Release|Any CPU
++		{727A498F-BF50-42F8-8523-40C0B5B1B233}.Release|x86.Build.0 = Release|Any CPU
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Debug|Win32.ActiveCfg = Debug|Any CPU
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Debug|Win32.Build.0 = Debug|Any CPU
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Debug|x86.ActiveCfg = Debug|x86
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Debug|x86.Build.0 = Debug|x86
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Release|Any CPU.Build.0 = Release|Any CPU
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Release|Win32.ActiveCfg = Release|Any CPU
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Release|Win32.Build.0 = Release|Any CPU
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Release|x86.ActiveCfg = Release|x86
++		{795AA2F5-3074-4BC5-A30F-1B6354044D9B}.Release|x86.Build.0 = Release|x86
++		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
++		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
++		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
++		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Debug|Win32.ActiveCfg = Debug|Any CPU
++		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Debug|Win32.Build.0 = Debug|Any CPU
++		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Debug|x86.ActiveCfg = Debug|Any CPU
++		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Debug|x86.Build.0 = Debug|Any CPU
++		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
++		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Release|Any CPU.Build.0 = Release|Any CPU
++		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
++		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
++		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Release|Win32.ActiveCfg = Release|Any CPU
++		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Release|Win32.Build.0 = Release|Any CPU
++		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Release|x86.ActiveCfg = Release|Any CPU
++		{B6C3C000-699B-4A2F-92D1-EEAEA9CFE2AB}.Release|x86.Build.0 = Release|Any CPU
++		{C979F151-AA29-47E4-B020-3039BA0986D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++		{C979F151-AA29-47E4-B020-3039BA0986D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
++		{C979F151-AA29-47E4-B020-3039BA0986D9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
++		{C979F151-AA29-47E4-B020-3039BA0986D9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
++		{C979F151-AA29-47E4-B020-3039BA0986D9}.Debug|Win32.ActiveCfg = Debug|Any CPU
++		{C979F151-AA29-47E4-B020-3039BA0986D9}.Debug|Win32.Build.0 = Debug|Any CPU
++		{C979F151-AA29-47E4-B020-3039BA0986D9}.Debug|x86.ActiveCfg = Debug|Any CPU
++		{C979F151-AA29-47E4-B020-3039BA0986D9}.Debug|x86.Build.0 = Debug|Any CPU
++		{C979F151-AA29-47E4-B020-3039BA0986D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
++		{C979F151-AA29-47E4-B020-3039BA0986D9}.Release|Any CPU.Build.0 = Release|Any CPU
++		{C979F151-AA29-47E4-B020-3039BA0986D9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
++		{C979F151-AA29-47E4-B020-3039BA0986D9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
++		{C979F151-AA29-47E4-B020-3039BA0986D9}.Release|Win32.ActiveCfg = Release|Any CPU
++		{C979F151-AA29-47E4-B020-3039BA0986D9}.Release|Win32.Build.0 = Release|Any CPU
++		{C979F151-AA29-47E4-B020-3039BA0986D9}.Release|x86.ActiveCfg = Release|Any CPU
++		{C979F151-AA29-47E4-B020-3039BA0986D9}.Release|x86.Build.0 = Release|Any CPU
++		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
++		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
++		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Debug|Mixed Platforms.Build.0 = Debug|x86
++		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Debug|Win32.ActiveCfg = Debug|x86
++		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Debug|Win32.Build.0 = Debug|x86
++		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Debug|x86.ActiveCfg = Debug|x86
++		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Debug|x86.Build.0 = Debug|x86
++		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
++		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Release|Any CPU.Build.0 = Release|Any CPU
++		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Release|Mixed Platforms.ActiveCfg = Release|x86
++		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Release|Mixed Platforms.Build.0 = Release|x86
++		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Release|Win32.ActiveCfg = Release|x86
++		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Release|Win32.Build.0 = Release|x86
++		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Release|x86.ActiveCfg = Release|x86
++		{F062D1D9-D307-492A-A56B-FF3C55F8F6C0}.Release|x86.Build.0 = Release|x86
++		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
++		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
++		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Debug|Mixed Platforms.Build.0 = Debug|x86
++		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Debug|Win32.ActiveCfg = Debug|x86
++		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Debug|Win32.Build.0 = Debug|x86
++		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Debug|x86.ActiveCfg = Debug|x86
++		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Debug|x86.Build.0 = Debug|x86
++		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
++		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Release|Any CPU.Build.0 = Release|Any CPU
++		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Release|Mixed Platforms.ActiveCfg = Release|x86
++		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Release|Mixed Platforms.Build.0 = Release|x86
++		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Release|Win32.ActiveCfg = Release|x86
++		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Release|Win32.Build.0 = Release|x86
++		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Release|x86.ActiveCfg = Release|x86
++		{F09A46BD-5737-45E7-BA60-A47C9F7821A9}.Release|x86.Build.0 = Release|x86
++		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
++		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
++		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
++		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
++		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Debug|Win32.ActiveCfg = Debug|Any CPU
++		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Debug|Win32.Build.0 = Debug|Any CPU
++		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Debug|x86.ActiveCfg = Debug|Any CPU
++		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Debug|x86.Build.0 = Debug|Any CPU
++		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
++		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Release|Any CPU.Build.0 = Release|Any CPU
++		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
++		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
++		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Release|Win32.ActiveCfg = Release|Any CPU
++		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Release|Win32.Build.0 = Release|Any CPU
++		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Release|x86.ActiveCfg = Release|Any CPU
++		{93ACC849-E7E1-4695-B59D-54B3737E48A6}.Release|x86.Build.0 = Release|Any CPU
++	EndGlobalSection
++	GlobalSection(MonoDevelopProperties) = preSolution
++		Policies = $0
++		$0.DotNetNamingPolicy = $1
++		$1.DirectoryNamespaceAssociation = None
++		$1.ResourceNamePolicy = FileFormatDefault
++		$0.TextStylePolicy = $2
++		$2.FileWidth = 120
++		$2.TabsToSpaces = False
++		$2.inheritsSet = VisualStudio
++		$2.inheritsScope = text/plain
++	EndGlobalSection
++	GlobalSection(SolutionProperties) = preSolution
++		HideSolutionNode = FALSE
++	EndGlobalSection
++	GlobalSection(ExtensibilityGlobals) = postSolution
++		SolutionGuid = {AE093311-3D4C-4D34-A610-573FC8E6A447}
++	EndGlobalSection
++EndGlobal
+diff --git a/src/Component/Component.csproj b/src/Component/Component.csproj
+index 028e16e..30a0361 100644
+--- a/src/Component/Component.csproj
++++ b/src/Component/Component.csproj
+@@ -1,5 +1,5 @@
+ ﻿<?xml version="1.0" encoding="utf-8"?>
+-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <PropertyGroup>
+     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+diff --git a/src/DebugServer/DebugServer.csproj b/src/DebugServer/DebugServer.csproj
+index dd4b20d..7641287 100644
+--- a/src/DebugServer/DebugServer.csproj
++++ b/src/DebugServer/DebugServer.csproj
+@@ -1,5 +1,5 @@
+ ﻿<?xml version="1.0" encoding="utf-8"?>
+-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+   <PropertyGroup>
+     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+diff --git a/src/GlobalAssemblyInfo.cs b/src/GlobalAssemblyInfo.cs
+index 0628f6f..0913057 100644
+--- a/src/GlobalAssemblyInfo.cs
++++ b/src/GlobalAssemblyInfo.cs
+@@ -1,4 +1,4 @@
+-﻿/*----------------------------------------------------------
++/*----------------------------------------------------------
+ This Source Code Form is subject to the terms of the 
+ Mozilla Public License, v.2.0. If a copy of the MPL 
+ was not distributed with this file, You can obtain one 
+diff --git a/src/OneScript.DebugProtocol/OneScript.DebugProtocol.csproj b/src/OneScript.DebugProtocol/OneScript.DebugProtocol.csproj
+index f957908..ecdd198 100644
+--- a/src/OneScript.DebugProtocol/OneScript.DebugProtocol.csproj
++++ b/src/OneScript.DebugProtocol/OneScript.DebugProtocol.csproj
+@@ -1,5 +1,5 @@
+ ﻿<?xml version="1.0" encoding="utf-8"?>
+-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+   <PropertyGroup>
+     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+diff --git a/src/ScriptEngine.HostedScript/ScriptEngine.HostedScript.csproj b/src/ScriptEngine.HostedScript/ScriptEngine.HostedScript.csproj
+index e476d8b..10400d2 100644
+--- a/src/ScriptEngine.HostedScript/ScriptEngine.HostedScript.csproj
++++ b/src/ScriptEngine.HostedScript/ScriptEngine.HostedScript.csproj
+@@ -1,5 +1,5 @@
+ ﻿<?xml version="1.0" encoding="utf-8"?>
+-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+   <PropertyGroup>
+     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+@@ -68,6 +68,7 @@
+     <ErrorReport>prompt</ErrorReport>
+     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+     <Prefer32Bit>false</Prefer32Bit>
++    <WarningLevel>4</WarningLevel>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNoSnegopat|x86'">
+     <OutputPath>bin\x86\ReleaseNoSnegopat\</OutputPath>
+@@ -80,14 +81,12 @@
+     <ErrorReport>prompt</ErrorReport>
+     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+     <Prefer32Bit>false</Prefer32Bit>
++    <WarningLevel>4</WarningLevel>
+   </PropertyGroup>
+   <ItemGroup>
+-    <Reference Include="Ionic.Zip">
+-      <HintPath>..\packages\DotNetZip.1.9.3\lib\net20\Ionic.Zip.dll</HintPath>
+-    </Reference>
+-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+-      <Private>True</Private>
++    <Reference Include="Ionic.Zip.Reduced" />
++    <Reference Include="Newtonsoft.Json">
++      <Package>monodevelop</Package>
+     </Reference>
+     <Reference Include="System" />
+     <Reference Include="System.Core" />
+@@ -225,7 +224,7 @@
+   </ItemGroup>
+   <ItemGroup>
+     <ProjectReference Include="..\OneScript.DebugProtocol\OneScript.DebugProtocol.csproj">
+-      <Project>{727a498f-bf50-42f8-8523-40c0b5b1b233}</Project>
++      <Project>{727A498F-BF50-42F8-8523-40C0B5B1B233}</Project>
+       <Name>OneScript.DebugProtocol</Name>
+     </ProjectReference>
+     <ProjectReference Include="..\ScriptEngine\ScriptEngine.csproj">
+@@ -246,18 +245,6 @@
+     <PreBuildEvent>
+     </PreBuildEvent>
+   </PropertyGroup>
+-  <PropertyGroup>
+-    <PostBuildEvent Condition=" '$(OS)' == 'Windows_NT' ">xcopy "$(TargetDir)ScriptEngine.HostedScript.dll" "$(SolutionDir)StandaloneRunner\" /Y /E /D</PostBuildEvent>
+-    <PostBuildEvent Condition=" '$(OS)' == 'Unix' ">cp -f "$(TargetDir)ScriptEngine.HostedScript.dll" "$(SolutionDir)StandaloneRunner/"</PostBuildEvent>
+-  </PropertyGroup>
+-  <PropertyGroup>
+-    <PostBuildEvent Condition=" '$(OS)' == 'Windows_NT' ">xcopy "$(TargetDir)ScriptEngine.HostedScript.dll" "$(SolutionDir)StandaloneRunner\" /Y /E /D
+-xcopy "$(TargetDir)Ionic.Zip.dll" "$(SolutionDir)StandaloneRunner\" /Y /E /D
+-xcopy "$(TargetDir)Newtonsoft.Json.dll" "$(SolutionDir)StandaloneRunner\" /Y /E /D</PostBuildEvent>
+-    <PostBuildEvent Condition=" '$(OS)' == 'Unix' ">cp -f "$(TargetDir)ScriptEngine.HostedScript.dll" "$(SolutionDir)StandaloneRunner"
+-cp -f "$(TargetDir)Ionic.Zip.dll" "$(SolutionDir)StandaloneRunner"
+-cp -f "$(TargetDir)Newtonsoft.Json.dll" "$(SolutionDir)StandaloneRunner"</PostBuildEvent>
+-  </PropertyGroup>
+   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+        Other similar extension points exist, see Microsoft.Common.targets.
+   <Target Name="BeforeBuild">
+diff --git a/src/ScriptEngine/ScriptEngine.csproj b/src/ScriptEngine/ScriptEngine.csproj
+index ed8a2d7..e677fa4 100644
+--- a/src/ScriptEngine/ScriptEngine.csproj
++++ b/src/ScriptEngine/ScriptEngine.csproj
+@@ -1,5 +1,5 @@
+ ﻿<?xml version="1.0" encoding="utf-8"?>
+-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+   <PropertyGroup>
+     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+@@ -72,6 +72,7 @@
+     <ErrorReport>prompt</ErrorReport>
+     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+     <Prefer32Bit>false</Prefer32Bit>
++    <WarningLevel>4</WarningLevel>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNoSnegopat|x86'">
+     <OutputPath>bin\x86\ReleaseNoSnegopat\</OutputPath>
+@@ -84,6 +85,7 @@
+     <ErrorReport>prompt</ErrorReport>
+     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+     <Prefer32Bit>false</Prefer32Bit>
++    <WarningLevel>4</WarningLevel>
+   </PropertyGroup>
+   <ItemGroup>
+     <Reference Include="System" />
+@@ -214,10 +216,6 @@
+     <PreBuildEvent>
+     </PreBuildEvent>
+   </PropertyGroup>
+-  <PropertyGroup>
+-    <PostBuildEvent Condition=" '$(OS)' == 'Windows_NT' ">xcopy "$(TargetDir)ScriptEngine.dll" "$(SolutionDir)StandaloneRunner\" /Y /E /D</PostBuildEvent>
+-    <PostBuildEvent Condition=" '$(OS)' == 'Unix' ">cp -f "$(TargetDir)ScriptEngine.dll" "$(SolutionDir)StandaloneRunner/"</PostBuildEvent>
+-  </PropertyGroup>
+   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+        Other similar extension points exist, see Microsoft.Common.targets.
+   <Target Name="BeforeBuild">
+diff --git a/src/StandaloneRunner/StandaloneRunner.csproj b/src/StandaloneRunner/StandaloneRunner.csproj
+index 9320c00..c7e9e0a 100644
+--- a/src/StandaloneRunner/StandaloneRunner.csproj
++++ b/src/StandaloneRunner/StandaloneRunner.csproj
+@@ -1,5 +1,5 @@
+ ﻿<?xml version="1.0" encoding="utf-8"?>
+-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+   <PropertyGroup>
+     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+@@ -66,6 +66,7 @@
+     <ErrorReport>prompt</ErrorReport>
+     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+     <Prefer32Bit>false</Prefer32Bit>
++    <WarningLevel>4</WarningLevel>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNoSnegopat|x86'">
+     <OutputPath>bin\x86\ReleaseNoSnegopat\</OutputPath>
+@@ -76,6 +77,7 @@
+     <ErrorReport>prompt</ErrorReport>
+     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+     <Prefer32Bit>false</Prefer32Bit>
++    <WarningLevel>4</WarningLevel>
+   </PropertyGroup>
+   <ItemGroup>
+     <Reference Include="System" />
+@@ -112,25 +114,7 @@
+       <Private>False</Private>
+     </ProjectReference>
+   </ItemGroup>
+-  <ItemGroup>
+-    <EmbeddedResource Include="ScriptEngine.dll" />
+-    <EmbeddedResource Include="ScriptEngine.HostedScript.dll" />
+-  </ItemGroup>
+-  <ItemGroup>
+-    <EmbeddedResource Include="Ionic.Zip.dll" />
+-  </ItemGroup>
+-  <ItemGroup>
+-    <EmbeddedResource Include="Newtonsoft.Json.dll" />
+-  </ItemGroup>
+   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+-  <PropertyGroup>
+-    <PreBuildEvent>
+-    </PreBuildEvent>
+-  </PropertyGroup>
+-  <PropertyGroup>
+-    <PostBuildEvent Condition=" '$(OS)' == 'Windows_NT' ">xcopy "$(TargetDir)StandaloneRunner.exe" "$(SolutionDir)oscript\" /Y /E /D</PostBuildEvent>
+-    <PostBuildEvent Condition=" '$(OS)' == 'Unix' ">cp -f "$(TargetDir)StandaloneRunner.exe" "$(SolutionDir)oscript/"</PostBuildEvent>
+-  </PropertyGroup>
+   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+        Other similar extension points exist, see Microsoft.Common.targets.
+   <Target Name="BeforeBuild">
+diff --git a/src/oscript/oscript.csproj b/src/oscript/oscript.csproj
+index dceb01e..db42b19 100644
+--- a/src/oscript/oscript.csproj
++++ b/src/oscript/oscript.csproj
+@@ -1,5 +1,5 @@
+ ﻿<?xml version="1.0" encoding="utf-8"?>
+-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+   <PropertyGroup>
+     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+@@ -72,6 +72,7 @@
+     <ErrorReport>prompt</ErrorReport>
+     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+     <Prefer32Bit>false</Prefer32Bit>
++    <WarningLevel>4</WarningLevel>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNoSnegopat|x86'">
+     <OutputPath>bin\x86\ReleaseNoSnegopat\</OutputPath>
+@@ -82,6 +83,7 @@
+     <ErrorReport>prompt</ErrorReport>
+     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+     <Prefer32Bit>false</Prefer32Bit>
++    <WarningLevel>4</WarningLevel>
+   </PropertyGroup>
+   <ItemGroup>
+     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+@@ -134,7 +136,7 @@
+   </ItemGroup>
+   <ItemGroup>
+     <ProjectReference Include="..\OneScript.DebugProtocol\OneScript.DebugProtocol.csproj">
+-      <Project>{727a498f-bf50-42f8-8523-40c0b5b1b233}</Project>
++      <Project>{727A498F-BF50-42F8-8523-40C0B5B1B233}</Project>
+       <Name>OneScript.DebugProtocol</Name>
+     </ProjectReference>
+     <ProjectReference Include="..\ScriptEngine.HostedScript\ScriptEngine.HostedScript.csproj">
+@@ -146,9 +148,6 @@
+       <Name>ScriptEngine</Name>
+     </ProjectReference>
+   </ItemGroup>
+-  <ItemGroup>
+-    <EmbeddedResource Include="StandaloneRunner.exe" />
+-  </ItemGroup>
+   <ItemGroup>
+     <None Include="packages.config" />
+   </ItemGroup>

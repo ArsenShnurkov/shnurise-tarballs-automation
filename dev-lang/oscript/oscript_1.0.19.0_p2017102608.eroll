@@ -1,0 +1,53 @@
+#!/bin/bash
+
+DOWNLOAD=false
+DOWNLOAD=true
+
+PROCESS_GRAMMARS=false
+PROCESS_GRAMMARS=true
+
+COMPILE=false
+#COMPILE=true
+
+CATEGORY="dev-lang"
+PN="oscript"
+PV="1.0.19.0_p2017102608"
+EGIT_ACCOUNT=EvilBeaver
+EGIT_REPOSITORY=OneScript
+EGIT_COMMIT="38b9946d2d8370b331a0419f55429924f5cd6085"
+SRC_URI="https://github.com/${EGIT_ACCOUNT}/${EGIT_REPOSITORY}/tarball/${EGIT_COMMIT}"
+EBUILD_DIR="${PWD}"
+
+DISTDIR="/var/portage-distdir"
+ARCHIVE_NAME="${DISTDIR}/${PN}-${PV}.tar.gz"
+
+if $DOWNLOAD ; then
+# downloading source code
+wget -c "${SRC_URI}" -O "${ARCHIVE_NAME}"
+# /var/portage-distdir/1script-1.0.19.0.tar.gz
+fi
+
+
+
+WORKDIR="/var/tmp/tarballs/shnurise/${CATEGORY}/${PN}"
+rm -rf ${WORKDIR}
+mkdir -p "${WORKDIR}"
+
+#new value of DISTDIR
+DISTDIR="${WORKDIR}/distdir"
+mkdir -p "${DISTDIR}"
+
+# -C, --directory=DIR
+#    change to directory DIR
+tar -zxvf "${ARCHIVE_NAME}" -C "${WORKDIR}"
+
+S="${WORKDIR}/$(ls -1 "${WORKDIR}" | grep "${EGIT_ACCOUNT}\-${EGIT_REPOSITORY}\-")"
+echo "\${S}=${S}"
+
+cd "${S}"
+/usr/bin/patch -p1 <"${EBUILD_DIR}/files/${PV}.patch" || exit
+
+#cd ${WORKDIR}
+tar -czvf "${WORKDIR}/${PN}-${PV}.tar.gz" --transform "s,^,${PN}/," -C "${S}" .
+
+cd "${EBUILD_DIR}"
