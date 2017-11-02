@@ -9,15 +9,7 @@ PROCESS_GRAMMARS=true
 COMPILE=false
 #COMPILE=true
 
-DISTDIR="/var/portage-distdir"
-PN="antlrcs"
-PV="3.5.2_beta1_p2017080216"
-ARCHIVE_NAME="${DISTDIR}/${PN}-${PV}.tar.gz"
-CATEGORY="dev-utils"
-WORKDIR="/var/tmp/tarballs/shnurise/${CATEGORY}/${PN}"
-DISTDIR="${WORKDIR}/distdir"
-
-OUTPUT_PATH=Reference/antlr3/tool/src/main/resources/org/antlr
+source ./environment.settings || exit
 
 if $DOWNLOAD ; then
 
@@ -30,11 +22,11 @@ mkdir -p "${DISTDIR}"
 #/usr/bin/msbuild "./antlrcs-3.5.2_beta1.proj"
 
 # downloading source code
-wget -c https://github.com/antlr/antlrcs/tarball/ca331b7109e1faa5a6aa7336bb6281ce9363e62b -O "${ARCHIVE_NAME}.orig"
+wget -c https://github.com/antlr/antlrcs/tarball/ca331b7109e1faa5a6aa7336bb6281ce9363e62b -O "${ARCHIVE_ORIG}"
 
 # -C, --directory=DIR
 #    change to directory DIR
-tar -zxvf "${ARCHIVE_NAME}.orig" -C "${WORKDIR}"
+tar -zxvf "${ARCHIVE_ORIG}" -C "${WORKDIR}"
 
 fi
 
@@ -129,50 +121,14 @@ find "${S}/Antlr3.Targets" -type f -iname "*.props" -exec rm {} \;
 find "${S}/Antlr3.Targets" -type f -iname "*.targets" -exec rm {} \;
 rm ${S}/Antlr3/app.config
 find ${S}/Antlr3.Targets/* -type d -not -iname "Antlr3.Targets.CSharp?" -exec rm -rf {} \; 
-find ${S}/$OUTPUT_PATH/Codegen/Templates/* -type d -not -iname "CSharp3" -exec rm -rf {} \;
+find ${S}/$OUTPUT_PATH/Codegen/Templates/* -type d -not -iname "CSharp?" -exec rm -rf {} \;
 
 if $COMPILE ; then
-
-mkdir -p ${S}/${OUTPUT_PATH}
-cd ${S}/Runtime/Antlr3.Runtime
-mono /usr/lib/mono/4.5/csc.exe /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.dll /debug+ /debug:full /optimize- "/out:${S}/${OUTPUT_PATH}/Antlr.Runtime.dll" /subsystemversion:6.00 /target:library /utf8output /recurse:*.cs
-cd ${DIR}
-
-cd ${S}/Runtime/Antlr3.Runtime.Debug
-#rm ParserDebugger.cs
-mono /usr/lib/mono/4.5/csc.exe /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.dll /reference:${S}/${OUTPUT_PATH}/Antlr.Runtime.dll /debug+ /debug:full /optimize- /out:${S}/${OUTPUT_PATH}/Antlr.Runtime.Debug.dll /subsystemversion:6.00 /target:library /utf8output /recurse:*.cs
-cd ${DIR}
-
-cd ${S}/Antlr4.StringTemplate
-#rm Debug/DebugTemplate.cs
-mono /usr/lib/mono/4.5/csc.exe /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.dll /reference:${S}/${OUTPUT_PATH}/Antlr.Runtime.dll /debug+ /debug:full /optimize- /out:${S}/${OUTPUT_PATH}/Antlr4.StringTemplate.dll /subsystemversion:6.00 /target:library /utf8output /recurse:*.cs
-cd ${DIR}
-
-cd ${S}/Antlr3
-mono /usr/lib/mono/4.5/csc.exe /define:NETSTANDARD /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.Xml.Linq.dll /reference:/usr/lib64/mono/4.6-api/System.dll /reference:${S}/${OUTPUT_PATH}/Antlr.Runtime.dll /reference:${S}/${OUTPUT_PATH}/Antlr.Runtime.Debug.dll /reference:${S}/${OUTPUT_PATH}/Antlr4.StringTemplate.dll /debug+ /debug:full /optimize- /out:${S}/${OUTPUT_PATH}/Antlr3.exe /subsystemversion:6.00 /target:exe /utf8output /recurse:*.cs
-cd ${DIR}
-
-cd ${S}/Antlr3.Targets/Antlr3.Targets.CSharp3
-mkdir -p ${S}/${OUTPUT_PATH}/Targets
-mono /usr/lib/mono/4.5/csc.exe /define:NETSTANDARD /noconfig /nowarn:1701,1702 /nostdlib+ /define:DEBUG /highentropyva+ /reference:/usr/lib64/mono/4.6-api/mscorlib.dll /reference:/usr/lib64/mono/4.6-api/System.Core.dll /reference:/usr/lib64/mono/4.6-api/System.dll /reference:${S}/${OUTPUT_PATH}/Antlr3.exe /reference:${S}/${OUTPUT_PATH}/Antlr4.StringTemplate.dll /debug+ /debug:full /optimize- /out:${S}/${OUTPUT_PATH}/Targets/Antlr3.Targets.CSharp3.dll /subsystemversion:6.00 /target:Library /utf8output /recurse:*.cs
-cd ${DIR}
-
-COMMAND2="/usr/bin/mono ${S}/${OUTPUT_PATH}/Antlr3.exe"
-cd ${S}/Antlr3/Grammars
-${COMMAND2} ${S}/Antlr3/Grammars/ANTLR.g3
-# cannot create target Antlr3.Targets.CSharp3Target code generator
-# https://github.com/antlr/antlrcs/blob/master/Antlr3.Targets/Antlr3.Targets.CSharp2/CSharp2Target.cs
-# https://github.com/antlr/antlrcs/blob/master/Antlr3.Targets/Antlr3.Targets.CSharp3/CSharp3Target.cs
-cd ${DIR}
-# meld ${S}/Antlr3.Targets/Antlr3.Targets.CSharp2/CSharp2Target.cs ${S}/Antlr3.Targets/Antlr3.Targets.CSharp3/CSharp3Target.cs
-# no significant difference
-
-#need to build AntlrBuildTask too
-
+    source ./${PN}-${PV}.main_compile
 fi
 
 #meld ${WORKDIR}/generator/tools/net40 ${S}/${OUTPUT_PATH}
 
-tar -czvf ${WORKDIR}/${PN}${APPENDIX}.tar.gz -C ${S} .
-cd ${WORKDIR}
-echo "${WORKDIR}/${PN}${APPENDIX}.tar.gz"
+tar -czvf "${REPACKED_PATHNAME}" -C "${S}" .
+cd "${WORKDIR}"
+echo "\${REPACKED_PATHNAME}=${REPACKED_PATHNAME}"

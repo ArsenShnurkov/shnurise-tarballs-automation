@@ -1,0 +1,27 @@
+#!/bin/bash
+
+SLOT="0"
+APPENDIX=""
+if [ "${SLOT}" != "0" ] ; then
+    APPENDIX="-${SLOT}"
+fi
+
+EBUILD_DIR="${PWD}"
+
+CATEGORY="dev-utils"
+PN="antlrcs"
+PV="3.5.2_beta1_p2017080216"
+
+EGIT_ACCOUNT=antlr
+EGIT_REPOSITORY=antlrcs
+DISTDIR_ORIG="/var/portage-distdir"
+ARCHIVE_ORIG="${DISTDIR_ORIG}/${PN}-${PV}.tar.gz.orig"
+
+WORKDIR="/var/tmp/tarballs/shnurise/${CATEGORY}/${PN}${APPENDIX}"
+DISTDIR="${WORKDIR}/distdir"
+
+# archive with repacked sources
+REPACKED_PATHNAME="${WORKDIR}/${PN}${APPENDIX}.tar.gz"
+echo "\${REPACKED_PATHNAME}=${REPACKED_PATHNAME}"
+
+OUTPUT_PATH=Reference/antlr3/tool/src/main/resources/org/antlr
