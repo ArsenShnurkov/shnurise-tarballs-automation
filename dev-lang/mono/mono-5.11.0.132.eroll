@@ -1,0 +1,14 @@
+#!/bin/bash
+
+WORKDIR=/var/tmp/tarballs/dotnet/dev-lang/mono
+
+rm -rf ${WORKDIR}
+mkdir -p ${WORKDIR}
+git clone https://github.com/mono/mono.git ${WORKDIR}
+cd ${WORKDIR}
+git submodule update --init --recursive
+git reset --hard 7363f1ac3d10c3f3a8d9e204fa80273a7b6a336e
+./autogen.sh
+#./configure
+make
+make dist
