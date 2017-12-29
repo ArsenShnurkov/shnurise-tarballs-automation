@@ -1,5 +1,7 @@
 #!/bin/bash
 
+EBUILD_DIR="${PWD}"
+FILES_DIR="${EBUILD_DIR}/files"
 WORKDIR=/var/tmp/tarballs/dotnet/dev-lang/mono
 
 rm -rf ${WORKDIR}
@@ -8,6 +10,8 @@ git clone https://github.com/mono/mono.git ${WORKDIR}
 cd ${WORKDIR}
 git submodule update --init --recursive
 git reset --hard 7363f1ac3d10c3f3a8d9e204fa80273a7b6a336e
+echo "patching"
+patch -i "${FILES_DIR}/remove-tests.patch" || exit 1
 ./autogen.sh
 #./configure
 make
