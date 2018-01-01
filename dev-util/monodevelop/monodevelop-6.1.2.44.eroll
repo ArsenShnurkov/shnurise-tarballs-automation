@@ -1,0 +1,35 @@
+#!/bin/bash
+
+DISTDIR=/var/calculate/remote/distfiles
+
+# Path to directory, for example: "${PORTDIR}/${CATEGORY}/${PN}/files"
+FILESDIR=/var/lib/tarball-scripts/ArsenShnurkov/shnurise-tarballs-automation/dev-util/monodevelop/files
+
+WORKDIR=/var/tmp/tarballs/dotnet/dev-util/monodevelop
+
+echo CHECKPOINT 1
+
+if [ ! -d "${WORKDIR}" ]; then
+    mkdir -p "${WORKDIR}"
+    cd "${WORKDIR}"
+    git clone https://github.com/mono/monodevelop.git "${WORKDIR}"
+else
+    cd "${WORKDIR}"
+    git fetch origin
+fi
+
+echo CHECKPOINT 2
+
+git reset --hard 0ccfcd52b95305ebd5b7eca0d88c1017035910ae
+
+echo CHECKPOINT 3
+
+git submodule update --init --recursive
+
+echo CHECKPOINT 4
+
+# cd "${WORKDIR}"
+
+./autoconf.sh
+make
+make dist
