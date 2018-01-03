@@ -24,7 +24,7 @@ fi
 
 echo CHECKPOINT 2
 
-${GIT} reset --hard 0ccfcd52b95305ebd5b7eca0d88c1017035910ae
+${GIT} reset --hard b6b82175e485e8eb8565dbdd8d4b0e15ad842ebe
 
 echo CHECKPOINT 3
 
@@ -35,9 +35,9 @@ echo CHECKPOINT 4
 # cd "${WORKDIR}"
 touch extras/MonoDevelop.Database/ChangeLog
 
-echo "Version=6.1.2" >version.config
-echo "Label=6.1.2.44" >>version.config
-echo "CompatVersion=6.0" >>version.config
+#echo "Version=6.1.2" >version.config
+#echo "Label=6.1.2.44" >>version.config
+#echo "CompatVersion=6.0" >>version.config
 
 patch ${WORKDIR}/main/src/core/MonoDevelop.Ide/Makefile.am ${FILESDIR}//main-src-core-Monodevelop.Ide-Makefile.am.patch || exit 1
 

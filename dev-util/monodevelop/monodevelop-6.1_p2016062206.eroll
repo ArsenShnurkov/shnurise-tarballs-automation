@@ -30,6 +30,7 @@ echo CHECKPOINT 4
 
 # cd "${WORKDIR}"
 touch extras/MonoDevelop.Database/ChangeLog
+
 patch ${WORKDIR}/main/src/core/MonoDevelop.Ide/Makefile.am ${FILESDIR}/main-src-core-Monodevelop.Ide-Makefile.am.patch
 ./configure --profile=all
 make dist
