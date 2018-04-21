@@ -8,7 +8,7 @@ fi
 
 EBUILD_DIR="${PWD}"
 
-CATEGORY="dev-utils"
+CATEGORY="dev-util"
 PN="antlrcs"
 PV="3.5.2_beta1_p2017080216"
 
